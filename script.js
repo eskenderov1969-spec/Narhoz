@@ -130,3 +130,26 @@ if (heroVisual) {
     });
 
 }
+
+
+/* THEME TOGGLE */
+
+const themeToggle = document.getElementById("themeToggle");
+
+if (themeToggle) {
+
+    themeToggle.addEventListener("click", () => {
+
+        const root = document.documentElement;
+        const next =
+            root.getAttribute("data-theme") === "light" ? "dark" : "light";
+
+        root.setAttribute("data-theme", next);
+
+        try {
+            localStorage.setItem("theme", next);
+        } catch (e) {}
+
+    });
+
+}
