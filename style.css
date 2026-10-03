@@ -70,16 +70,14 @@ textarea {
     margin-bottom: 25px;
 }
 
-.section-heading h2,
-.contact-info h2 {
+.section-heading h2 {
     font-size: clamp(48px, 7vw, 90px);
     line-height: 0.95;
     font-weight: 700;
     letter-spacing: -4px;
 }
 
-.section-heading h2 span,
-.contact-info h2 span {
+.section-heading h2 span {
     color: var(--gray);
 }
 
@@ -501,8 +499,7 @@ textarea {
         margin-bottom: 50px;
     }
 
-    .section-heading h2,
-.contact-info h2 {
+    .section-heading h2 {
         letter-spacing: -2px;
     }
 
@@ -1016,18 +1013,6 @@ textarea {
     max-width: 560px;
 }
 
-.contact-info h2 {
-    margin: 25px 0 30px;
-    font-size: 64px;
-    font-weight: 400;
-    line-height: 1.05;
-    letter-spacing: -2px;
-}
-
-.contact-info h2 span {
-    color: var(--red);
-}
-
 .contact-description {
     max-width: 500px;
     margin-bottom: 50px;
@@ -1174,11 +1159,6 @@ textarea {
 }
 
 @media (max-width: 600px) {
-
-    .contact-info h2 {
-        font-size: 44px;
-        letter-spacing: -1px;
-    }
 
     .contact-description {
         margin-bottom: 40px;
