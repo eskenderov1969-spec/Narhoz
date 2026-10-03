@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://eskenderov1969-spec.github.io/Narhoz/sitemap.xml
