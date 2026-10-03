@@ -1245,48 +1245,6 @@ textarea {
 }
 
 
-/* =====================================================
-   CUSTOM CURSOR
-===================================================== */
-
-.cursor-ring {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 2000;
-    width: 34px;
-    height: 34px;
-    margin: -17px 0 0 -17px;
-    border: 1px solid var(--red);
-    border-radius: 50%;
-    opacity: 0;
-    pointer-events: none;
-    transition:
-        opacity 0.3s ease,
-        width 0.25s ease,
-        height 0.25s ease,
-        margin 0.25s ease,
-        background 0.25s ease;
-}
-
-.cursor-ring.visible {
-    opacity: 1;
-}
-
-.cursor-ring.active {
-    width: 56px;
-    height: 56px;
-    margin: -28px 0 0 -28px;
-    background: rgba(229, 57, 53, 0.12);
-}
-
-@media (hover: none), (pointer: coarse) {
-
-    .cursor-ring {
-        display: none;
-    }
-}
-
 @media (max-width: 600px) {
 
     .stats {
