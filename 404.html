@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — ESKENDEROV</title>
+    <script>
+        try {
+            var t = localStorage.getItem("theme");
+            if (t) document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/Narhoz/style.css">
+    <style>
+        .error-page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 25px; padding: 20px; text-align: center; }
+        .error-page h1 { font-size: clamp(90px, 20vw, 200px); line-height: 1; letter-spacing: -6px; font-weight: 700; }
+        .error-page h1 span { color: var(--red); }
+        .error-page p { color: var(--gray); }
+    </style>
+</head>
+<body>
+    <main class="error-page">
+        <h1>404<span>.</span></h1>
+        <p>Такой страницы не существует.</p>
+        <a href="/Narhoz/" class="button button-primary">На главную</a>
+    </main>
+</body>
+</html>
