@@ -983,7 +983,7 @@ textarea {
 
 .contact-actions {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
 
@@ -1135,4 +1135,20 @@ textarea {
 
 :root[data-theme="light"] .theme-toggle .icon-moon {
     display: block;
+}
+
+
+/* =====================================================
+   SERVICES
+===================================================== */
+
+.services .ai-list {
+    margin-top: 0;
+}
+
+@media (max-width: 600px) {
+
+    .contact-actions {
+        grid-template-columns: 1fr;
+    }
 }
