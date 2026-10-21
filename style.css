@@ -55,6 +55,15 @@ textarea {
     --btn-bg: #ffffff;
     --btn-text: #000000;
     --container: 1200px;
+
+    /* скругления и тени */
+    --radius-sm: 14px;
+    --radius-md: 22px;
+    --radius-lg: 32px;
+    --radius-xl: 44px;
+    --radius-pill: 999px;
+    --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.35);
+    --shadow-hover: 0 18px 50px rgba(229, 57, 53, 0.12);
 }
 
 /* СВЕТЛАЯ ТЕМА */
@@ -1262,5 +1271,244 @@ textarea {
 
     .marquee-track {
         animation: none;
+    }
+}
+
+
+/* =====================================================
+   MODERN UI — скругления, карточки, мягкие тени
+===================================================== */
+
+:root[data-theme="light"] {
+    --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 18px 50px rgba(229, 57, 53, 0.15);
+}
+
+body {
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+    background: var(--red);
+    color: #fff;
+}
+
+:focus-visible {
+    outline: 2px solid var(--red);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+}
+
+/* --- Шапка: плавающая «таблетка» при прокрутке --- */
+
+.header::before {
+    transition: opacity 0.4s ease, inset 0.4s ease, border-radius 0.4s ease;
+}
+
+.header.scrolled::before {
+    inset: 8px 24px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-soft);
+}
+
+/* --- Кнопки --- */
+
+.button {
+    border-radius: var(--radius-pill);
+    padding: 0 32px;
+}
+
+.button-primary:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+/* --- Метки секций --- */
+
+.section-number {
+    display: inline-block;
+    padding: 7px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--card-bg);
+}
+
+/* --- Секции-панели --- */
+
+.about,
+.contact {
+    margin: 0 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+}
+
+/* --- Карточка в hero --- */
+
+.hero-card {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+}
+
+/* --- Бегущая строка с плавным затуханием по краям --- */
+
+.marquee {
+    border: 0;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+/* --- Статистика --- */
+
+.stat {
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--card-bg);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat:hover {
+    transform: translateY(-4px);
+    border-color: rgba(229, 57, 53, 0.4);
+    box-shadow: var(--shadow-hover);
+}
+
+/* --- Фото в «Обо мне» --- */
+
+.about-photo {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+}
+
+.about-photo::before {
+    top: 22px;
+    left: 22px;
+    height: 4px;
+    border-radius: var(--radius-pill);
+}
+
+/* --- Список навыков карточками --- */
+
+.skill-list {
+    gap: 12px;
+}
+
+.skill-item {
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--card-bg);
+    transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.skill-item:hover {
+    border-color: rgba(229, 57, 53, 0.4);
+    transform: translateX(4px);
+}
+
+/* --- Теги --- */
+
+.learning-tags span {
+    padding: 10px 18px;
+    border-radius: var(--radius-pill);
+    background: var(--card-bg);
+}
+
+/* --- Карточки AI Development / Услуги --- */
+
+.ai-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-top: 0;
+}
+
+.ai-item {
+    padding: 28px 30px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--card-bg);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ai-item:hover {
+    transform: translateY(-4px);
+    border-color: rgba(229, 57, 53, 0.4);
+    box-shadow: var(--shadow-hover);
+}
+
+.ai-bottom {
+    padding: 24px 32px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--card-bg);
+}
+
+/* --- Контакты --- */
+
+.contact-action {
+    border-radius: var(--radius-md);
+}
+
+.contact-action:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+.contact-location {
+    border-top: 0;
+}
+
+/* --- Подвал --- */
+
+.footer {
+    margin-top: 20px;
+    border-top: 0;
+}
+
+.back-top {
+    border-radius: 50%;
+}
+
+/* --- Адаптив --- */
+
+@media (max-width: 900px) {
+
+    .header.scrolled::before {
+        inset: 6px 10px;
+    }
+
+    .nav {
+        border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    }
+
+    .stats {
+        gap: 12px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .about,
+    .contact {
+        margin: 0 10px;
+        border-radius: var(--radius-lg);
+    }
+
+    .stat {
+        padding: 18px 14px;
+        border-radius: var(--radius-sm);
+    }
+
+    .ai-item {
+        padding: 22px 20px;
+    }
+
+    .ai-bottom {
+        padding: 22px 20px;
+    }
+
+    .about-photo {
+        border-radius: var(--radius-md);
     }
 }
