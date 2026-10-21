@@ -136,15 +136,30 @@ if (heroVisual) {
 
 const themeToggle = document.getElementById("themeToggle");
 
+function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", theme === "light" ? "#fafafa" : "#0a0a0a");
+}
+
+function hasSavedTheme() {
+    try {
+        const t = localStorage.getItem("theme");
+        return t === "light" || t === "dark";
+    } catch (e) {
+        return false;
+    }
+}
+
 if (themeToggle) {
 
     themeToggle.addEventListener("click", () => {
 
-        const root = document.documentElement;
         const next =
-            root.getAttribute("data-theme") === "light" ? "dark" : "light";
+            document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
 
-        root.setAttribute("data-theme", next);
+        applyTheme(next);
 
         try {
             localStorage.setItem("theme", next);
@@ -152,6 +167,22 @@ if (themeToggle) {
 
     });
 
+}
+
+/* Пока пользователь сам не выбирал тему — следуем за системной */
+if (window.matchMedia) {
+
+    const systemTheme = window.matchMedia("(prefers-color-scheme: light)");
+
+    const onSystemThemeChange = (event) => {
+        if (!hasSavedTheme()) applyTheme(event.matches ? "light" : "dark");
+    };
+
+    if (systemTheme.addEventListener) {
+        systemTheme.addEventListener("change", onSystemThemeChange);
+    } else if (systemTheme.addListener) {
+        systemTheme.addListener(onSystemThemeChange);   // старые Safari
+    }
 }
 
 
@@ -320,7 +351,21 @@ const i18nNodes = [];
 
 const langToggle = document.getElementById("langToggle");
 
-function setLanguage(lang) {
+/* Русский — для ru и близких языков региона, для остальных — английский */
+const RU_LANGS = ["ru", "be", "uk", "kk"];
+
+function detectBrowserLang() {
+    const list = (navigator.languages && navigator.languages.length)
+        ? navigator.languages
+        : [navigator.language || "ru"];
+
+    const first = String(list[0] || "ru").toLowerCase().split("-")[0];
+
+    return RU_LANGS.includes(first) ? "ru" : "en";
+}
+
+/* persist = false для автоопределения: выбор сохраняем только после клика */
+function setLanguage(lang, persist = true) {
 
     i18nNodes.forEach(item => {
 
@@ -350,9 +395,11 @@ function setLanguage(lang) {
         langToggle.textContent = lang === "en" ? "RU" : "EN";
     }
 
-    try {
-        localStorage.setItem("lang", lang);
-    } catch (e) {}
+    if (persist) {
+        try {
+            localStorage.setItem("lang", lang);
+        } catch (e) {}
+    }
 }
 
 if (langToggle) {
@@ -361,13 +408,19 @@ if (langToggle) {
         setLanguage(document.documentElement.lang === "en" ? "ru" : "en");
     });
 
-    let savedLang = "ru";
+    let savedLang = null;
     try {
-        savedLang = localStorage.getItem("lang") || "ru";
+        savedLang = localStorage.getItem("lang");
     } catch (e) {}
 
-    if (savedLang === "en") {
-        setLanguage("en");
+    if (savedLang !== "ru" && savedLang !== "en") {
+        savedLang = null;
+    }
+
+    const startLang = savedLang || detectBrowserLang();
+
+    if (startLang === "en") {
+        setLanguage("en", false);
     }
 }
 
