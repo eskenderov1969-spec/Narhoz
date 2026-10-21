@@ -1515,48 +1515,11 @@ body {
 
 
 /* =====================================================
-   ЭФФЕКТЫ — печатающийся текст, слова, spotlight, переходы
+   MOTION — печать, слова, spotlight, плавные переходы
 ===================================================== */
-
-:root {
-    --ease: cubic-bezier(0.22, 1, 0.36, 1);
-}
 
 html {
     scroll-padding-top: 90px;
-}
-
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-}
-
-/* --- Печатающийся заголовок --- */
-
-.hero h2 {
-    min-height: 2.15em;
-}
-
-.typed-line {
-    display: block;
-}
-
-.hero h2 .typed-cursor {
-    display: inline-block;
-    width: 3px;
-    height: 0.85em;
-    margin-left: 6px;
-    background: var(--red);
-    vertical-align: -0.05em;
-    animation: blink 1s steps(1) infinite;
-}
-
-@keyframes blink {
-    50% { opacity: 0; }
 }
 
 /* --- Более плавное появление блоков --- */
@@ -1564,116 +1527,152 @@ html {
 .reveal {
     transform: translateY(48px);
     transition:
-        opacity 1s var(--ease),
-        transform 1s var(--ease);
+        opacity 1s cubic-bezier(0.22, 0.61, 0.36, 1),
+        transform 1s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-/* --- Появление текста по словам --- */
+/* --- Каскадное появление карточек --- */
 
-w-d {
+@keyframes card-rise {
+    from {
+        opacity: 0;
+        transform: translateY(32px);
+    }
+}
+
+.reveal.visible .stat,
+.reveal.visible .skill-item,
+.reveal.visible .ai-item {
+    animation: card-rise 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+    animation-delay: calc(var(--n, 0) * 110ms + 250ms);
+}
+
+.stat:nth-child(1), .skill-item:nth-child(1), .ai-item:nth-child(1) { --n: 0; }
+.stat:nth-child(2), .skill-item:nth-child(2), .ai-item:nth-child(2) { --n: 1; }
+.stat:nth-child(3), .skill-item:nth-child(3), .ai-item:nth-child(3) { --n: 2; }
+.skill-item:nth-child(4) { --n: 3; }
+.skill-item:nth-child(5) { --n: 4; }
+
+/* --- Появление заголовков по словам --- */
+
+.split {
+    font-style: normal;
+    color: inherit;
+}
+
+.word {
     display: inline-block;
-}
-
-[data-split="fast"] {
-    --word-step: 22ms;
-}
-
-.reveal w-d {
+    font-style: normal;
+    color: inherit;
     opacity: 0;
     transform: translateY(0.5em);
     filter: blur(8px);
     transition:
-        opacity 0.8s var(--ease),
-        transform 0.8s var(--ease),
-        filter 0.8s var(--ease);
-    transition-delay: min(calc(var(--i, 0) * var(--word-step, 70ms)), 1400ms);
+        opacity 0.7s ease,
+        transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+        filter 0.7s ease;
+    transition-delay: calc(var(--i, 0) * 80ms + 200ms);
 }
 
-.reveal.visible w-d {
+.reveal.visible .word {
     opacity: 1;
     transform: none;
     filter: none;
 }
 
-/* --- Каскадное появление карточек --- */
+/* --- Печатающийся заголовок в hero --- */
 
-.stagger:not(.visible) {
-    opacity: 0;
-    transform: translateY(28px);
+.hero h2 .hero-line {
+    display: block;
+    color: var(--white);
 }
 
-.stagger.visible {
-    animation: staggerIn 0.9s var(--ease) backwards;
-    animation-delay: var(--d, 0ms);
+.hero h2 .hero-line-muted {
+    color: var(--gray);
 }
 
-@keyframes staggerIn {
-    from {
-        opacity: 0;
-        transform: translateY(28px);
-    }
+.hero h2 .hero-line-typed {
+    min-height: 1.05em;
+    white-space: nowrap;
 }
 
-/* --- Spotlight: подсветка карточек за курсором --- */
+.hero h2 .typed-word {
+    color: var(--red);
+}
 
-.spot {
+.typed-caret {
+    display: inline-block;
+    width: 3px;
+    height: 0.85em;
+    margin-left: 6px;
+    vertical-align: -0.06em;
+    background: var(--red);
+    animation: caret-blink 1s steps(1) infinite;
+}
+
+@keyframes caret-blink {
+    50% { opacity: 0; }
+}
+
+/* --- Подсветка карточек под курсором (spotlight) --- */
+
+.spotlight {
     position: relative;
     isolation: isolate;
 }
 
-.spot::before,
-.spot::after {
+.spotlight::before,
+.spotlight::after {
     content: "";
     position: absolute;
-    inset: -1px;
+    inset: 0;
     border-radius: inherit;
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.35s ease;
 }
 
-.spot::before {
+/* мягкое свечение внутри карточки */
+.spotlight::before {
     z-index: -1;
     background: radial-gradient(
         420px circle at var(--mx, 50%) var(--my, 50%),
         rgba(229, 57, 53, 0.16),
-        transparent 65%
+        transparent 60%
     );
 }
 
-.spot::after {
+/* светящаяся рамка */
+.spotlight::after {
     padding: 1px;
     background: radial-gradient(
         260px circle at var(--mx, 50%) var(--my, 50%),
         rgba(229, 57, 53, 0.9),
-        transparent 70%
+        transparent 65%
     );
     -webkit-mask:
         linear-gradient(#000 0 0) content-box,
         linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask:
-        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0) content-box exclude,
         linear-gradient(#000 0 0);
-    mask-composite: exclude;
 }
 
-@media (hover: hover) {
-
-    .spot:hover::before,
-    .spot:hover::after {
-        opacity: 1;
-    }
+.spotlight:hover::before,
+.spotlight:hover::after {
+    opacity: 1;
 }
 
-/* --- Плавный въезд панелей при прокрутке (где поддерживается) --- */
+/* --- Плавные переходы между секциями при прокрутке ---
+   (Chrome, Edge, Safari; остальные браузеры просто пропускают) */
 
 @supports (animation-timeline: view()) {
 
-    @keyframes panelIn {
+    @keyframes panel-in {
         from {
             opacity: 0.35;
-            transform: translateY(40px) scale(0.97);
+            transform: scale(0.95);
         }
         to {
             opacity: 1;
@@ -1681,31 +1680,52 @@ w-d {
         }
     }
 
+    @keyframes hero-out {
+        to {
+            opacity: 0;
+            transform: translateY(-50px) scale(0.97);
+        }
+    }
+
     .about,
     .contact {
-        animation: panelIn linear both;
+        animation: panel-in linear both;
         animation-timeline: view();
-        animation-range: entry 0% entry 45%;
+        animation-range: entry 0% entry 70%;
+    }
+
+    .hero-container {
+        animation: hero-out linear both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 90%;
     }
 }
 
-/* --- Уменьшенное движение --- */
+/* --- Уважаем «уменьшение движения» --- */
 
 @media (prefers-reduced-motion: reduce) {
 
-    .reveal,
-    .reveal w-d,
-    .stagger:not(.visible) {
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .word {
         opacity: 1;
         transform: none;
         filter: none;
         transition: none;
     }
 
-    .stagger.visible,
+    .reveal.visible .stat,
+    .reveal.visible .skill-item,
+    .reveal.visible .ai-item,
     .about,
     .contact,
-    .hero h2 .typed-cursor {
+    .hero-container,
+    .circle,
+    .typed-caret {
         animation: none;
     }
 }
