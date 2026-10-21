@@ -1512,3 +1512,200 @@ body {
         border-radius: var(--radius-md);
     }
 }
+
+
+/* =====================================================
+   ЭФФЕКТЫ — печатающийся текст, слова, spotlight, переходы
+===================================================== */
+
+:root {
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html {
+    scroll-padding-top: 90px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* --- Печатающийся заголовок --- */
+
+.hero h2 {
+    min-height: 2.15em;
+}
+
+.typed-line {
+    display: block;
+}
+
+.hero h2 .typed-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 0.85em;
+    margin-left: 6px;
+    background: var(--red);
+    vertical-align: -0.05em;
+    animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* --- Более плавное появление блоков --- */
+
+.reveal {
+    transform: translateY(48px);
+    transition:
+        opacity 1s var(--ease),
+        transform 1s var(--ease);
+}
+
+/* --- Появление текста по словам --- */
+
+w-d {
+    display: inline-block;
+}
+
+[data-split="fast"] {
+    --word-step: 22ms;
+}
+
+.reveal w-d {
+    opacity: 0;
+    transform: translateY(0.5em);
+    filter: blur(8px);
+    transition:
+        opacity 0.8s var(--ease),
+        transform 0.8s var(--ease),
+        filter 0.8s var(--ease);
+    transition-delay: min(calc(var(--i, 0) * var(--word-step, 70ms)), 1400ms);
+}
+
+.reveal.visible w-d {
+    opacity: 1;
+    transform: none;
+    filter: none;
+}
+
+/* --- Каскадное появление карточек --- */
+
+.stagger:not(.visible) {
+    opacity: 0;
+    transform: translateY(28px);
+}
+
+.stagger.visible {
+    animation: staggerIn 0.9s var(--ease) backwards;
+    animation-delay: var(--d, 0ms);
+}
+
+@keyframes staggerIn {
+    from {
+        opacity: 0;
+        transform: translateY(28px);
+    }
+}
+
+/* --- Spotlight: подсветка карточек за курсором --- */
+
+.spot {
+    position: relative;
+    isolation: isolate;
+}
+
+.spot::before,
+.spot::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.spot::before {
+    z-index: -1;
+    background: radial-gradient(
+        420px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(229, 57, 53, 0.16),
+        transparent 65%
+    );
+}
+
+.spot::after {
+    padding: 1px;
+    background: radial-gradient(
+        260px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(229, 57, 53, 0.9),
+        transparent 70%
+    );
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+}
+
+@media (hover: hover) {
+
+    .spot:hover::before,
+    .spot:hover::after {
+        opacity: 1;
+    }
+}
+
+/* --- Плавный въезд панелей при прокрутке (где поддерживается) --- */
+
+@supports (animation-timeline: view()) {
+
+    @keyframes panelIn {
+        from {
+            opacity: 0.35;
+            transform: translateY(40px) scale(0.97);
+        }
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+
+    .about,
+    .contact {
+        animation: panelIn linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 45%;
+    }
+}
+
+/* --- Уменьшенное движение --- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .reveal,
+    .reveal w-d,
+    .stagger:not(.visible) {
+        opacity: 1;
+        transform: none;
+        filter: none;
+        transition: none;
+    }
+
+    .stagger.visible,
+    .about,
+    .contact,
+    .hero h2 .typed-cursor {
+        animation: none;
+    }
+}
