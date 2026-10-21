@@ -53,12 +53,19 @@
     </script>
 
     <script>
-        try {
-            var savedTheme = localStorage.getItem("theme");
-            if (savedTheme) {
-                document.documentElement.setAttribute("data-theme", savedTheme);
+        /* Тема: сохранённый выбор, иначе — системная настройка устройства */
+        (function () {
+            var theme = null;
+            try { theme = localStorage.getItem("theme"); } catch (e) {}
+            if (theme !== "light" && theme !== "dark") {
+                theme = window.matchMedia &&
+                    window.matchMedia("(prefers-color-scheme: light)").matches
+                    ? "light" : "dark";
             }
-        } catch (e) {}
+            document.documentElement.setAttribute("data-theme", theme);
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute("content", theme === "light" ? "#fafafa" : "#0a0a0a");
+        })();
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
