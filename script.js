@@ -164,7 +164,7 @@ const I18N = {
     "Обо мне": "About",
     "Услуги": "Services",
     "Контакты": "Contact",
-    "Создаю цифровые проекты": "I build digital projects",
+    "Создаю": "I build",
     "с помощью ИИ.": "with AI.",
     "Разработка веб-сайтов, приложений и цифровых решений с использованием искусственного интеллекта, программирования и современных технологий.":
         "Development of websites, applications and digital solutions using artificial intelligence, programming and modern technologies.",
@@ -232,24 +232,90 @@ const I18N_ATTRS = [
     }
 ];
 
+/* Заголовки, которые появляются по словам */
+const WORD_ROOTS = ".section-heading h2, .about-intro h3, .ai-intro h3, .contact-cta h3";
+
+/* Собирает слова внутри wrapper: каждое слово — отдельный элемент для анимации */
+function buildWords(wrapper, text, lead, trail, offset) {
+
+    const words = text.trim().split(/\s+/);
+
+    wrapper.textContent = "";
+
+    if (lead) wrapper.appendChild(document.createTextNode(lead));
+
+    words.forEach((word, i) => {
+        const el = document.createElement("i");
+        el.className = "word";
+        el.style.setProperty("--i", offset + i);
+        el.textContent = word;
+        wrapper.appendChild(el);
+
+        if (i < words.length - 1) {
+            wrapper.appendChild(document.createTextNode(" "));
+        }
+    });
+
+    if (trail) wrapper.appendChild(document.createTextNode(trail));
+
+    return words.length;
+}
+
 const i18nNodes = [];
 
 (function collectTextNodes() {
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const wordNodes = [];
+    const offsets = new Map();
     let node;
     while ((node = walker.nextNode())) {
         if (["SCRIPT", "STYLE"].includes(node.parentNode.nodeName)) continue;
         const key = node.nodeValue.replace(/\s+/g, " ").trim();
+        let item = null;
+
         if (I18N[key]) {
-            i18nNodes.push({
+            item = {
                 node: node,
                 ru: node.nodeValue,
                 key: key,
                 lead: node.nodeValue.match(/^\s*/)[0],
                 trail: node.nodeValue.match(/\s*$/)[0]
-            });
+            };
+            i18nNodes.push(item);
+        }
+
+        const root = node.parentNode.closest(WORD_ROOTS);
+
+        if (root && /\p{L}/u.test(node.nodeValue)) {
+            wordNodes.push({ node: node, item: item, root: root });
         }
     }
+
+    /* Разбиваем на слова после обхода, чтобы не ломать TreeWalker */
+    wordNodes.forEach(entry => {
+
+        const wrapper = document.createElement("i");
+        wrapper.className = "split";
+
+        const raw = entry.node.nodeValue;
+        const offset = offsets.get(entry.root) || 0;
+
+        const count = buildWords(
+            wrapper,
+            raw.replace(/\s+/g, " "),
+            raw.match(/^\s*/)[0],
+            raw.match(/\s*$/)[0],
+            offset
+        );
+
+        offsets.set(entry.root, offset + count);
+        entry.node.parentNode.replaceChild(wrapper, entry.node);
+
+        if (entry.item) {
+            entry.item.wrapper = wrapper;
+            entry.item.offset = offset;
+        }
+    });
 })();
 
 const langToggle = document.getElementById("langToggle");
@@ -257,8 +323,20 @@ const langToggle = document.getElementById("langToggle");
 function setLanguage(lang) {
 
     i18nNodes.forEach(item => {
-        item.node.nodeValue =
-            lang === "en" ? item.lead + I18N[item.key] + item.trail : item.ru;
+
+        if (item.wrapper) {
+            buildWords(
+                item.wrapper,
+                lang === "en" ? I18N[item.key] : item.key,
+                item.lead,
+                item.trail,
+                item.offset
+            );
+        } else {
+            item.node.nodeValue =
+                lang === "en" ? item.lead + I18N[item.key] + item.trail : item.ru;
+        }
+
     });
 
     I18N_ATTRS.forEach(item => {
@@ -341,5 +419,115 @@ if ("IntersectionObserver" in window) {
 } else {
 
     counters.forEach(el => { el.textContent = el.dataset.count; });
+
+}
+
+
+/* =====================================================
+   TYPING EFFECT (заголовок в hero)
+===================================================== */
+
+const typedEl = document.getElementById("typedWord");
+
+/* Слова, которые печатаются после «Создаю» / «I build» */
+const TYPED_WORDS = {
+    ru: ["сайты", "приложения", "скрипты", "автоматизацию"],
+    en: ["websites", "apps", "scripts", "automation"]
+};
+
+let typedIndex = 0;
+let typedChars = 0;
+let typedDeleting = false;
+let typedTimer = null;
+
+function currentLang() {
+    return document.documentElement.lang === "en" ? "en" : "ru";
+}
+
+function typedStep() {
+
+    const words = TYPED_WORDS[currentLang()];
+    const word = words[typedIndex % words.length];
+    let delay;
+
+    if (!typedDeleting) {
+
+        typedChars++;
+        typedEl.textContent = word.slice(0, typedChars);
+
+        if (typedChars >= word.length) {
+            typedDeleting = true;
+            delay = 1800;       // пауза, когда слово напечатано
+        } else {
+            delay = 90;         // скорость печати
+        }
+
+    } else {
+
+        typedChars--;
+        typedEl.textContent = word.slice(0, typedChars);
+
+        if (typedChars <= 0) {
+            typedDeleting = false;
+            typedIndex++;
+            delay = 350;
+        } else {
+            delay = 45;         // скорость стирания
+        }
+
+    }
+
+    typedTimer = setTimeout(typedStep, delay);
+}
+
+function typedRestart() {
+    clearTimeout(typedTimer);
+    typedChars = 0;
+    typedDeleting = false;
+    typedEl.textContent = "";
+    typedTimer = setTimeout(typedStep, 400);
+}
+
+function typedShowStatic() {
+    typedEl.textContent = TYPED_WORDS[currentLang()][0];
+}
+
+if (typedEl) {
+
+    if (reducedMotion) {
+
+        typedShowStatic();
+        if (langToggle) langToggle.addEventListener("click", typedShowStatic);
+
+    } else {
+
+        typedEl.textContent = "";
+        typedTimer = setTimeout(typedStep, 700);
+        if (langToggle) langToggle.addEventListener("click", typedRestart);
+
+    }
+
+}
+
+
+/* =====================================================
+   SPOTLIGHT (подсветка карточек под курсором)
+===================================================== */
+
+const SPOTLIGHT_SELECTOR = ".stat, .skill-item, .ai-item, .contact-action";
+
+if (window.matchMedia("(hover: hover)").matches) {
+
+    document.querySelectorAll(SPOTLIGHT_SELECTOR).forEach(card => {
+
+        card.classList.add("spotlight");
+
+        card.addEventListener("pointermove", (event) => {
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty("--mx", (event.clientX - rect.left) + "px");
+            card.style.setProperty("--my", (event.clientY - rect.top) + "px");
+        });
+
+    });
 
 }
