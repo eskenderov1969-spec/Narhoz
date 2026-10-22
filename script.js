@@ -273,7 +273,7 @@ function applyTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
 
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", theme === "light" ? "#fbf8f7" : "#0a0a0a");
+    if (meta) meta.setAttribute("content", theme === "light" ? "#fbf8f7" : "#141416");
 }
 
 function hasSavedTheme() {
