@@ -324,6 +324,7 @@ if (window.matchMedia) {
 ===================================================== */
 
 const I18N = {
+    "Перейти к содержимому": "Skip to content",
     "Главная": "Home",
     "Обо мне": "About",
     "Услуги": "Services",
@@ -1174,3 +1175,71 @@ if (contactForm) {
         }
     });
 }
+
+
+/* =====================================================
+   V4: бегущая рамка, фоновые слова, blur-up фото
+===================================================== */
+
+/* --- Бегущая рамка: добавляем .edge во все карточки --- */
+document.querySelectorAll(".stat, .ai-item, .contact-action, .bento-card, .ai-bottom").forEach(card => {
+    if (card.querySelector(":scope > .edge")) return;
+    if (getComputedStyle(card).position === "static") card.style.position = "relative";
+    const edge = document.createElement("i");
+    edge.className = "edge";
+    edge.setAttribute("aria-hidden", "true");
+    card.appendChild(edge);
+});
+
+/* --- Фоновые слова: смещение при прокрутке --- */
+(function bgWords() {
+    const words = Array.from(document.querySelectorAll(".bg-word"));
+    if (!words.length) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let ticking = false;
+
+    function update() {
+        ticking = false;
+        const vh = window.innerHeight;
+        words.forEach(word => {
+            const sec = word.parentElement.getBoundingClientRect();
+            if (sec.bottom < -200 || sec.top > vh + 200) return;
+            // -1 .. 1: секция проходит экран
+            const p = ((sec.top + sec.height / 2) - vh / 2) / (vh / 2 + sec.height / 2);
+            const dir = Number(word.dataset.dir || 1);
+            word.style.setProperty("--bwx", (p * -140 * dir).toFixed(1) + "px");
+        });
+    }
+
+    function onScroll() {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    update();
+})();
+
+/* --- Фото: скелетон, пока грузится, затем размытое появление --- */
+(function photoBlurUp() {
+    document.querySelectorAll(".about-photo").forEach(box => {
+        const img = box.querySelector("img");
+        if (!img || (img.complete && img.naturalWidth > 0)) return;
+
+        box.classList.add("img-loading");
+
+        const done = () => {
+            box.classList.remove("img-loading");
+            box.classList.add("img-ready");
+        };
+        img.addEventListener("load", done, { once: true });
+        // первая ошибка (нет WebP) — inline onerror подставит JPG, ждём его;
+        // если и JPG не загрузился — просто убираем скелетон
+        let allowed = box.querySelector("source") ? 1 : 0;
+        img.addEventListener("error", () => {
+            if (allowed > 0) { allowed--; return; }
+            box.classList.remove("img-loading");
+        });
+    });
+})();
