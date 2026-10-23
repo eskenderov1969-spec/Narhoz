@@ -3247,3 +3247,235 @@ textarea:focus-visible {
 @media (prefers-reduced-motion: reduce) {
     .project-art::after { animation: none; }
 }
+
+
+/* =====================================================
+   V6: СМЕНА ТЕМЫ КРУГОМ, ПРОЦЕСС ПО ЛИНИИ, ЗАГЛУШКА ФОТО
+===================================================== */
+
+/* --- Тема «разливается» от кнопки (круг рисует скрипт) --- */
+
+.theme-vt::view-transition-old(root),
+.theme-vt::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+
+.theme-vt::view-transition-old(root) { z-index: 1; }
+.theme-vt::view-transition-new(root) { z-index: 2; }
+
+.theme-vt *,
+.theme-vt *::before,
+.theme-vt *::after {
+    transition: none !important;
+}
+
+/* --- Процесс работы --- */
+
+.ai-bottom.process {
+    display: block;
+    padding: 40px 44px 20px;
+    letter-spacing: normal;
+}
+
+.process-title {
+    display: block;
+    color: var(--gray);
+    font-size: 11px;
+    letter-spacing: 3px;
+}
+
+.process-list {
+    --p: 0;
+    position: relative;
+    margin: 34px 0 0;
+    padding: 0 0 0 52px;
+    list-style: none;
+}
+
+.process-list::before,
+.process-list::after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    bottom: 40px;
+    left: 11px;
+    width: 2px;
+    border-radius: 2px;
+}
+
+.process-list::before {
+    background: var(--border);
+}
+
+.process-list::after {
+    background: linear-gradient(to bottom, var(--red), #ff8a80);
+    box-shadow: 0 0 14px rgba(229, 57, 53, 0.55);
+    transform: scaleY(var(--p));
+    transform-origin: top;
+}
+
+.process-step {
+    position: relative;
+    padding-bottom: 38px;
+    opacity: 0.45;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.process-step.on {
+    opacity: 1;
+}
+
+.process-dot {
+    position: absolute;
+    top: 4px;
+    left: -52px;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    background: var(--bg);
+    transition: border-color 0.4s ease, background 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
+}
+
+.process-dot::after {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    background: var(--red);
+    transform: scale(0);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.process-step.on .process-dot {
+    border-color: var(--red);
+    box-shadow: 0 0 0 6px rgba(229, 57, 53, 0.14), 0 0 18px rgba(229, 57, 53, 0.45);
+}
+
+.process-step.on .process-dot::after {
+    transform: scale(1);
+}
+
+.process-body small {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--red);
+    font-size: 11px;
+    letter-spacing: 3px;
+}
+
+.process-body h3 {
+    margin-bottom: 8px;
+    color: var(--white);
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+}
+
+.process-body p {
+    max-width: 520px;
+    color: var(--gray);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+    .ai-bottom.process { padding: 30px 22px 6px; }
+    .process-list { padding-left: 44px; }
+    .process-dot { left: -44px; }
+    .process-list::before,
+    .process-list::after { left: 9px; }
+}
+
+/* --- Заглушка вместо фото --- */
+
+.photo-ph {
+    display: none;
+}
+
+.about-photo.no-photo picture {
+    display: none;
+}
+
+.about-photo.no-photo .photo-ph {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 720px;
+    overflow: hidden;
+    background:
+        radial-gradient(70% 55% at 80% 8%, rgba(229, 57, 53, 0.55), transparent 65%),
+        radial-gradient(60% 50% at 10% 100%, rgba(255, 138, 128, 0.28), transparent 65%),
+        linear-gradient(160deg, #26212a 0%, #1a1a1f 55%, #2a1a1d 100%);
+}
+
+.about-photo.no-photo .photo-ph::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px) 0 0 / 48px 48px,
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px) 0 0 / 48px 48px;
+    -webkit-mask: radial-gradient(circle at 50% 45%, #000 20%, transparent 75%);
+    mask: radial-gradient(circle at 50% 45%, #000 20%, transparent 75%);
+}
+
+.about-photo.no-photo .photo-ph::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--grain);
+    opacity: 0.35;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+}
+
+.ph-e {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(220px, 28vw, 380px);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    background: linear-gradient(170deg, #ffffff 10%, rgba(255, 255, 255, 0.55) 45%, rgba(229, 57, 53, 0.9) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 20px 50px rgba(229, 57, 53, 0.35));
+    animation: ph-float 7s ease-in-out infinite;
+}
+
+.ph-cap {
+    position: absolute;
+    left: 24px;
+    bottom: 22px;
+    z-index: 1;
+    padding: 6px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.25);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+@keyframes ph-float {
+    50% { transform: translateY(-12px) rotate(-1.5deg); }
+}
+
+@media (max-width: 900px) {
+    .about-photo.no-photo .photo-ph { min-height: 500px; }
+}
+
+@media (max-width: 600px) {
+    .about-photo.no-photo .photo-ph { min-height: 400px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ph-e { animation: none; }
+    .process-step { opacity: 1; transition: none; }
+}
