@@ -291,6 +291,10 @@
                             <img src="about-me-photo.jpg" alt="Рабочее место разработчика" loading="lazy" decoding="async"
                                  onerror="var p=this.parentNode;this.onerror=null;p.querySelectorAll('source').forEach(function(x){x.remove()});this.src='about-me-photo.jpg';">
                         </picture>
+                        <div class="photo-ph" aria-hidden="true">
+                            <span class="ph-e">E</span>
+                            <span class="ph-cap">Фото появится здесь</span>
+                        </div>
                     </div>
 
                     <!-- ИНФОРМАЦИЯ -->
@@ -586,19 +590,49 @@
 
                 </div>
 
-                <div class="ai-bottom reveal">
+                <div class="ai-bottom process reveal">
 
-                    <span>MY PROCESS</span>
+                    <span class="process-title">MY PROCESS</span>
 
-                    <div class="ai-flow">
-                        <span>IDEA</span>
-                        <i>→</i>
-                        <span>MOCKUP</span>
-                        <i>→</i>
-                        <span>DEVELOPMENT</span>
-                        <i>→</i>
-                        <strong>LAUNCH</strong>
-                    </div>
+                    <ol class="process-list" id="processList">
+
+                        <li class="process-step">
+                            <span class="process-dot" aria-hidden="true"></span>
+                            <div class="process-body">
+                                <small>01</small>
+                                <h3>IDEA</h3>
+                                <p>Обсуждаем задачу, цели и то, что должно получиться в итоге.</p>
+                            </div>
+                        </li>
+
+                        <li class="process-step">
+                            <span class="process-dot" aria-hidden="true"></span>
+                            <div class="process-body">
+                                <small>02</small>
+                                <h3>MOCKUP</h3>
+                                <p>Набрасываю структуру и дизайн, согласуем всё до написания кода.</p>
+                            </div>
+                        </li>
+
+                        <li class="process-step">
+                            <span class="process-dot" aria-hidden="true"></span>
+                            <div class="process-body">
+                                <small>03</small>
+                                <h3>DEVELOPMENT</h3>
+                                <p>Пишу код с помощью ИИ и сам проверяю каждый этап.</p>
+                            </div>
+                        </li>
+
+                        <li class="process-step">
+                            <span class="process-dot" aria-hidden="true"></span>
+                            <div class="process-body">
+                                <small>04</small>
+                                <h3>LAUNCH</h3>
+                                <p>Тестирую, публикую и остаюсь на связи после запуска.</p>
+                            </div>
+                        </li>
+
+                    </ol>
 
                 </div>
 
