@@ -292,11 +292,39 @@ if (themeToggle) {
         const next =
             document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
 
-        applyTheme(next);
+        const change = () => applyTheme(next);
 
         try {
             localStorage.setItem("theme", next);
         } catch (e) {}
+
+        const canVT = typeof document.startViewTransition === "function" &&
+            !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (!canVT) { change(); return; }
+
+        // круг «разливается» от кнопки
+        const r = themeToggle.getBoundingClientRect();
+        const x = r.left + r.width / 2;
+        const y = r.top + r.height / 2;
+        const radius = Math.hypot(
+            Math.max(x, window.innerWidth - x),
+            Math.max(y, window.innerHeight - y)
+        );
+
+        const root = document.documentElement;
+        root.classList.add("theme-vt");
+
+        const vt = document.startViewTransition(change);
+
+        vt.ready.then(() => {
+            root.animate(
+                { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+                { duration: 750, easing: "cubic-bezier(0.22, 0.61, 0.36, 1)", pseudoElement: "::view-transition-new(root)" }
+            );
+        }).catch(() => {});
+
+        vt.finished.finally(() => root.classList.remove("theme-vt"));
 
     });
 
@@ -325,6 +353,11 @@ if (window.matchMedia) {
 
 const I18N = {
     "Перейти к содержимому": "Skip to content",
+    "Обсуждаем задачу, цели и то, что должно получиться в итоге.": "We discuss the task, the goals and what the result should be.",
+    "Набрасываю структуру и дизайн, согласуем всё до написания кода.": "I sketch the structure and design, and we agree on everything before any code is written.",
+    "Пишу код с помощью ИИ и сам проверяю каждый этап.": "I write the code with the help of AI and check every stage myself.",
+    "Тестирую, публикую и остаюсь на связи после запуска.": "I test, publish and stay in touch after the launch.",
+    "Фото появится здесь": "Photo coming soon",
     "Проекты": "Projects",
     "Все": "All",
     "Автоматизация": "Automation",
@@ -1254,6 +1287,7 @@ document.querySelectorAll(".stat, .ai-item, .contact-action, .bento-card, .ai-bo
         img.addEventListener("error", () => {
             if (allowed > 0) { allowed--; return; }
             box.classList.remove("img-loading");
+            box.classList.add("no-photo");
         });
     });
 })();
@@ -1290,4 +1324,39 @@ document.querySelectorAll(".stat, .ai-item, .contact-action, .bento-card, .ai-bo
             if (empty) empty.hidden = shown > 0;
         });
     });
+})();
+
+
+/* =====================================================
+   V6: линия процесса и заглушка фото
+===================================================== */
+
+/* --- Процесс: линия прорисовывается по мере скролла --- */
+(function processLine() {
+    const list = document.getElementById("processList");
+    if (!list) return;
+    const steps = Array.from(list.querySelectorAll(".process-step"));
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let ticking = false;
+
+    function update() {
+        ticking = false;
+        const rect = list.getBoundingClientRect();
+        const vh = window.innerHeight;
+        const reach = vh * 0.62;
+        const p = reduce ? 1 : Math.min(1, Math.max(0, (reach - rect.top) / rect.height));
+        list.style.setProperty("--p", p.toFixed(4));
+        steps.forEach(step => {
+            const dot = step.querySelector(".process-dot").getBoundingClientRect();
+            step.classList.toggle("on", reduce || dot.top + dot.height / 2 < reach);
+        });
+    }
+
+    function onScroll() {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    update();
 })();
