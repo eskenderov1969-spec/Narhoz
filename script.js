@@ -325,6 +325,20 @@ if (window.matchMedia) {
 
 const I18N = {
     "Перейти к содержимому": "Skip to content",
+    "Проекты": "Projects",
+    "Все": "All",
+    "Автоматизация": "Automation",
+    "Скоро": "Soon",
+    "Демо": "Demo",
+    "Код": "Code",
+    "Лендинг для бизнеса": "Business landing page",
+    "AI-ассистент": "AI assistant",
+    "Telegram-бот": "Telegram bot",
+    "Скрипт автоматизации": "Automation script",
+    "Интернет-магазин": "Online store",
+    "Приложение на Python": "Python application",
+    "Проект в работе. Скоро здесь появится описание, скриншоты и ссылки.": "Work in progress. A description, screenshots and links will appear here soon.",
+    "В этой категории пока нет проектов.": "No projects in this category yet.",
     "Главная": "Home",
     "Обо мне": "About",
     "Услуги": "Services",
@@ -713,7 +727,7 @@ if (typedEl) {
    SPOTLIGHT (подсветка карточек под курсором)
 ===================================================== */
 
-const SPOTLIGHT_SELECTOR = ".stat, .skill-item, .ai-item, .contact-action";
+const SPOTLIGHT_SELECTOR = ".stat, .skill-item, .ai-item, .contact-action, .project-card";
 
 if (window.matchMedia("(hover: hover)").matches) {
 
@@ -971,7 +985,7 @@ if (magnets.length) {
 
 if (hoverCapable && !prefersReduced) {
 
-    document.querySelectorAll(".stat, .ai-item, .contact-action").forEach(card => {
+    document.querySelectorAll(".stat, .ai-item, .contact-action, .project-card").forEach(card => {
 
         card.classList.add("tilt");
 
@@ -1182,7 +1196,7 @@ if (contactForm) {
 ===================================================== */
 
 /* --- Бегущая рамка: добавляем .edge во все карточки --- */
-document.querySelectorAll(".stat, .ai-item, .contact-action, .bento-card, .ai-bottom").forEach(card => {
+document.querySelectorAll(".stat, .ai-item, .contact-action, .bento-card, .ai-bottom, .project-card").forEach(card => {
     if (card.querySelector(":scope > .edge")) return;
     if (getComputedStyle(card).position === "static") card.style.position = "relative";
     const edge = document.createElement("i");
@@ -1240,6 +1254,40 @@ document.querySelectorAll(".stat, .ai-item, .contact-action, .bento-card, .ai-bo
         img.addEventListener("error", () => {
             if (allowed > 0) { allowed--; return; }
             box.classList.remove("img-loading");
+        });
+    });
+})();
+
+
+/* =====================================================
+   ПРОЕКТЫ: фильтр по категориям
+===================================================== */
+(function projectFilters() {
+    const chips = document.querySelectorAll(".filter-chip");
+    const cards = document.querySelectorAll(".project-card");
+    const empty = document.getElementById("projectEmpty");
+    if (!chips.length) return;
+
+    chips.forEach(chip => {
+        chip.addEventListener("click", () => {
+            const f = chip.dataset.filter;
+            chips.forEach(c => {
+                const on = c === chip;
+                c.classList.toggle("active", on);
+                c.setAttribute("aria-pressed", on ? "true" : "false");
+            });
+            let shown = 0;
+            cards.forEach(card => {
+                const ok = f === "all" || card.dataset.tags.split(" ").includes(f);
+                card.hidden = !ok;
+                if (ok) {
+                    shown++;
+                    card.classList.remove("pop");
+                    void card.offsetWidth;
+                    card.classList.add("pop");
+                }
+            });
+            if (empty) empty.hidden = shown > 0;
         });
     });
 })();
