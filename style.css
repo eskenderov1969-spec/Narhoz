@@ -3578,3 +3578,13 @@ textarea:focus-visible {
 @media (prefers-reduced-motion: reduce) {
     .status-dot::after { animation: none !important; }
 }
+
+/* --- Hero не заезжает под шапку на невысоких экранах --- */
+.hero {
+    padding-top: 130px;
+    padding-bottom: 70px;
+}
+
+@media (max-width: 900px) {
+    .hero { padding-top: 120px; }
+}
