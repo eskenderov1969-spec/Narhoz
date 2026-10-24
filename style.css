@@ -3479,3 +3479,102 @@ textarea:focus-visible {
     .ph-e { animation: none; }
     .process-step { opacity: 1; transition: none; }
 }
+
+
+/* =====================================================
+   V7: СТАТУС «ОТКРЫТ К ПРОЕКТАМ»
+===================================================== */
+
+.brand {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.status {
+    --dot: #3ddc84;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 6px 14px 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--card-bg);
+    color: var(--gray);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+}
+
+.status:hover {
+    border-color: color-mix(in srgb, var(--dot) 55%, transparent);
+    color: var(--white);
+}
+
+.status[data-status="busy"] { --dot: #ffb300; }
+.status[data-status="away"] { --dot: #8d8d95; }
+
+.status-dot {
+    position: relative;
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--dot);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--dot) 70%, transparent);
+}
+
+.status[data-status="open"] .status-dot::after,
+.status[data-status="busy"] .status-dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--dot);
+    animation: status-pulse 2s ease-out infinite;
+}
+
+@keyframes status-pulse {
+    from { transform: scale(1); opacity: 0.7; }
+    to   { transform: scale(3.2); opacity: 0; }
+}
+
+.status-text {
+    color: var(--white);
+}
+
+.status-time {
+    padding-left: 9px;
+    border-left: 1px solid var(--border);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+}
+
+/* в шапке: рядом с логотипом, не двигая меню */
+.status-header {
+    position: absolute;
+    left: calc(100% + 18px);
+    top: 50%;
+    translate: 0 -50%;
+}
+
+.status-hero {
+    display: inline-flex;
+    margin-bottom: 22px;
+}
+
+/* в шапке только точка и время: полный текст — в hero */
+.status-header .status-text,
+.status-header .status-tz { display: none; }
+.status-header .status-time { padding-left: 0; border-left: 0; }
+
+/* на узких экранах в шапке не помещается: остаётся метка в hero */
+@media (max-width: 1199px) {
+    .status-header { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .status-dot::after { animation: none !important; }
+}
