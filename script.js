@@ -353,6 +353,9 @@ if (window.matchMedia) {
 
 const I18N = {
     "Перейти к содержимому": "Skip to content",
+    "Открыт к проектам": "Open to projects",
+    "Занят проектом": "Busy with a project",
+    "Не на связи": "Away",
     "Обсуждаем задачу, цели и то, что должно получиться в итоге.": "We discuss the task, the goals and what the result should be.",
     "Набрасываю структуру и дизайн, согласуем всё до написания кода.": "I sketch the structure and design, and we agree on everything before any code is written.",
     "Пишу код с помощью ИИ и сам проверяю каждый этап.": "I write the code with the help of AI and check every stage myself.",
@@ -1359,4 +1362,51 @@ document.querySelectorAll(".stat, .ai-item, .contact-action, .bento-card, .ai-bo
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     update();
+})();
+
+
+/* =====================================================
+   СТАТУС: метка «Открыт к проектам» + местное время
+   (статус меняется вручную: data-status="open | busy | away" в index.html)
+===================================================== */
+(function liveStatus() {
+    const badges = document.querySelectorAll(".status");
+    if (!badges.length) return;
+
+    function render() {
+        const now = new Date();
+        badges.forEach(b => {
+            const t = b.querySelector(".status-time");
+            if (!t) return;
+            let text;
+            try {
+                text = new Intl.DateTimeFormat("ru-RU", {
+                    hour: "2-digit", minute: "2-digit", hour12: false,
+                    timeZone: b.dataset.tz || undefined
+                }).format(now);
+            } catch (e) {
+                text = now.toTimeString().slice(0, 5);
+            }
+            t.textContent = text;
+            if (b.dataset.tzLabel) {
+                const tz = document.createElement("span");
+                tz.className = "status-tz";
+                tz.textContent = " " + b.dataset.tzLabel;
+                t.appendChild(tz);
+            }
+        });
+    }
+
+    // подсказка для компактной метки в шапке
+    badges.forEach(b => {
+        const txt = b.querySelector(".status-text");
+        if (txt && b.classList.contains("status-header")) b.title = txt.textContent.trim();
+    });
+
+    render();
+    // обновляем в начале каждой минуты
+    setTimeout(function tick() {
+        render();
+        setInterval(render, 60000);
+    }, (60 - new Date().getSeconds()) * 1000);
 })();
