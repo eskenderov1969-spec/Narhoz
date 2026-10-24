@@ -3560,11 +3560,6 @@ textarea:focus-visible {
     translate: 0 -50%;
 }
 
-.status-hero {
-    display: inline-flex;
-    margin-bottom: 22px;
-}
-
 /* в шапке только точка и время: полный текст — в hero */
 .status-header .status-text,
 .status-header .status-tz { display: none; }
