@@ -201,7 +201,7 @@ window.addEventListener("scroll", () => {
             window.scrollY >= sectionTop &&
             window.scrollY < sectionTop + sectionHeight
         ) {
-            currentSection = section.getAttribute("id");
+            currentSection = section.dataset.nav || section.getAttribute("id");
         }
 
     });
@@ -353,6 +353,128 @@ if (window.matchMedia) {
 
 const I18N = {
     "Перейти к содержимому": "Skip to content",
+    "Услуги подробно": "Services in detail",
+    "Блог": "Blog",
+    "Ссылки": "Links",
+    "Кейс": "Case study",
+    "Подробнее об услугах": "More about services",
+    "Визитка": "Business card",
+    "Одностраничный сайт о вас или вашем деле.": "A one-page site about you or your business.",
+    "Адаптивная вёрстка": "Responsive layout",
+    "Форма обратной связи": "Contact form",
+    "Базовое SEO и мета-теги": "Basic SEO and meta tags",
+    "Публикация в сети": "Publishing online",
+    "от … ₽": "from … ₽",
+    "Обсудить": "Discuss",
+    "Лендинг": "Landing page",
+    "Продающая страница с анимациями и аналитикой.": "A selling page with animations and analytics.",
+    "Популярный": "Popular",
+    "Несколько смысловых блоков": "Several content blocks",
+    "Анимации и интерактив": "Animations and interactivity",
+    "Подключение формы и аналитики": "Form and analytics integration",
+    "Оптимизация скорости": "Speed optimization",
+    "Сайт под ключ": "Turnkey website",
+    "Многостраничный проект от идеи до запуска.": "A multi-page project from idea to launch.",
+    "Дизайн и структура с нуля": "Design and structure from scratch",
+    "Несколько страниц и разделов": "Several pages and sections",
+    "Домен, хостинг, публикация": "Domain, hosting, publishing",
+    "Поддержка после запуска": "Support after launch",
+    "Цены": "Pricing",
+    "Ориентировочная стоимость. Точную цену называю после короткого обсуждения задачи.": "Approximate prices. I give the exact figure after a short discussion of the task.",
+    "Нужно что-то другое: приложение, скрипт или автоматизация? Оценю индивидуально.": "Need something else: an app, a script or automation? I will estimate it individually.",
+    "Все услуги подробно": "All services in detail",
+    "Стек": "Stack",
+    "Использую каждый день": "I use every day",
+    "Изучаю и развиваю": "Learning and growing",
+    "Мой путь": "My path",
+    "С чего всё началось": "How it all started",
+    "Здесь будет короткая история: как появился интерес к программированию.": "A short story will go here: how the interest in programming appeared.",
+    "Первые проекты": "First projects",
+    "Первые сайты, скрипты и программы: что получилось и чему научился.": "First websites, scripts and programs: what came out of them and what I learned.",
+    "AI-assisted разработка": "AI-assisted development",
+    "Работаю с ИИ как с инструментом: быстрее прототипы, больше готовых проектов.": "I use AI as a tool: faster prototypes and more finished projects.",
+    "Сегодня": "Today",
+    "Создаю сайты, приложения и автоматизацию, продолжаю учиться и беру новые проекты.": "I build websites, apps and automation, keep learning and take on new projects.",
+    "Сколько это стоит?": "How much does it cost?",
+    "Цена зависит от задачи: ориентиры есть в разделе «Цены». Точную стоимость называю после короткого обсуждения, до начала работы.": "The price depends on the task: you will find guidelines in the “Pricing” section. I name the exact cost after a short discussion, before work starts.",
+    "Как быстро вы сделаете сайт?": "How fast can you build a website?",
+    "Сроки зависят от объёма. Небольшие сайты и лендинги делаются быстро, а крупные проекты мы заранее разбиваем на этапы и фиксируем сроки.": "Timelines depend on scope. Small sites and landing pages are quick; larger projects are split into stages up front and the dates are agreed in advance.",
+    "Что нужно от меня как от клиента?": "What do you need from me as a client?",
+    "Рассказать о задаче и целях, прислать материалы (тексты, логотип, фото, примеры, которые нравятся) и быть на связи для согласований.": "Tell me about the task and goals, send materials (texts, logo, photos, examples you like) and stay in touch for approvals.",
+    "Как проходит оплата?": "How does payment work?",
+    "Условия обсуждаем заранее. Обычно работа делится на этапы, и оплата привязывается к ним: так спокойнее обеим сторонам.": "We agree on the terms in advance. Usually the work is split into stages and payment is tied to them, which is calmer for both sides.",
+    "Что будет после запуска?": "What happens after launch?",
+    "Помогаю опубликовать сайт, объясняю, как им пользоваться, и остаюсь на связи: могу исправить ошибки и внести небольшие доработки.": "I help publish the site, explain how to use it and stay in touch: I can fix bugs and make small improvements.",
+    "Вы используете ИИ. Это надёжно?": "You use AI. Is that reliable?",
+    "ИИ ускоряет работу, но структуру, логику и результат я контролирую сам: проверяю код, исправляю ошибки и отвечаю за итог.": "AI speeds up the work, but I control the structure, logic and result myself: I review the code, fix errors and take responsibility for the outcome.",
+    "Вопросы": "FAQ",
+    "Остались вопросы? Напишите мне, отвечу лично.": "Still have questions? Write to me, I will answer personally.",
+    "Зависит от объёма, обсуждаем до старта": "Depends on scope, agreed before the start",
+    "Адаптивный дизайн и вёрстка": "Responsive design and layout",
+    "Анимации и интерактивные элементы": "Animations and interactive elements",
+    "Форма обратной связи и аналитика": "Contact form and analytics",
+    "Базовое SEO и публикация в сети": "Basic SEO and publishing online",
+    "Смотреть проекты": "See projects",
+    "Что входит": "What is included",
+    "Срок": "Timeline",
+    "Стоимость": "Price",
+    "Разработка на Python, C# и C / C++": "Development in Python, C# and C / C++",
+    "Инструменты под вашу конкретную задачу": "Tools built for your specific task",
+    "Работа с данными и интеграции": "Data handling and integrations",
+    "Инструкция по запуску и использованию": "Setup and usage instructions",
+    "Разбор рутинных процессов": "Analysis of routine processes",
+    "Скрипты и боты под задачу": "Scripts and bots for the task",
+    "ИИ там, где он действительно помогает": "AI where it really helps",
+    "Тестирование и помощь после запуска": "Testing and help after launch",
+    "Что я делаю, что входит в работу и как выглядит процесс.": "What I do, what the work includes and what the process looks like.",
+    "Есть задача? Давайте обсудим.": "Have a task? Let's discuss it.",
+    "Расскажите, что нужно сделать, и я отвечу с оценкой сроков и стоимости.": "Tell me what needs to be done and I will reply with an estimate of time and cost.",
+    "Написать мне": "Write to me",
+    "Цены и пакеты": "Pricing and packages",
+    "Роль": "Role",
+    "Разработка и дизайн": "Development and design",
+    "HTML / CSS · JavaScript": "HTML / CSS · JavaScript",
+    "Год": "Year",
+    "20XX": "20XX",
+    "Ссылка": "Link",
+    "Задача": "The task",
+    "Здесь будет описание задачи: что нужно было сделать, для кого и зачем.": "The task description will go here: what needed to be done, for whom and why.",
+    "Решение": "The solution",
+    "Здесь будет рассказ о том, как я подошёл к задаче: структура, дизайн, технологии и сложные места.": "The story of how I approached the task will go here: structure, design, technologies and tricky parts.",
+    "Результат": "The result",
+    "Здесь появятся итоги: что получилось, цифры и отзывы, ссылки на сайт и код.": "The outcome will go here: what came out of it, figures and feedback, links to the site and the code.",
+    "Все проекты": "All projects",
+    "Проект в работе. Скоро здесь появится подробный рассказ: задача, решение и результат.": "Work in progress. A detailed story will appear here soon: the task, the solution and the result.",
+    "Нужен похожий проект?": "Need a similar project?",
+    "Расскажите о задаче, и я предложу решение и оценку сроков.": "Tell me about your task and I will suggest a solution and a time estimate.",
+    "Другие проекты": "Other projects",
+    "Читать": "Read",
+    "Заметка": "Note",
+    "Как я работаю с ИИ при разработке сайтов": "How I work with AI when building websites",
+    "Короткий разбор того, как ИИ помогает ускорять разработку и где важно оставаться за рулём.": "A short look at how AI speeds up development and where it is important to stay in control.",
+    "Разбор": "Breakdown",
+    "От идеи до запуска: как я разбиваю задачу": "From idea to launch: how I break a task down",
+    "Скоро здесь появится статья.": "An article will appear here soon.",
+    "Инструменты": "Tools",
+    "Инструменты, которые я использую каждый день": "Tools I use every day",
+    "Короткие заметки о работе с ИИ, разработке и находках по пути.": "Short notes about working with AI, development and finds along the way.",
+    "Весь блог": "All posts",
+    "Черновик": "Draft",
+    "Зачем мне ИИ": "Why I use AI",
+    "ИИ помогает ускорять разработку: быстрее собирать прототипы, находить решения и работать с кодом. Но он остаётся инструментом, а не заменой понимания.": "AI helps speed up development: build prototypes faster, find solutions and work with code. But it remains a tool, not a substitute for understanding.",
+    "Как выглядит мой процесс": "What my process looks like",
+    "Формулирую идею и разбиваю её на этапы.": "I formulate the idea and break it into stages.",
+    "Прошу ИИ помочь с прототипом или конкретным куском кода.": "I ask AI to help with a prototype or a specific piece of code.",
+    "Читаю результат, проверяю и исправляю ошибки.": "I read the result, check it and fix errors.",
+    "Адаптирую решение под задачу и довожу до запуска.": "I adapt the solution to the task and bring it to launch.",
+    "Что я проверяю сам": "What I check myself",
+    "Структуру проекта, логику работы и конечный результат. Для меня важно понимать, как работает решение, а не просто получить готовый код.": "The project structure, the logic and the final result. It matters to me to understand how the solution works, not just to get ready-made code.",
+    "Итог": "Summary",
+    "Это черновик заметки: скоро здесь появится полная версия с примерами и находками.": "This is a draft note: the full version with examples and findings will appear here soon.",
+    "Написать на email": "Write an email",
+    "Telegram": "Telegram",
+    "Услуги и цены": "Services and pricing",
+    "Главная страница": "Home page",
     "Открыт к проектам": "Open to projects",
     "Занят проектом": "Busy with a project",
     "Не на связи": "Away",
@@ -763,7 +885,7 @@ if (typedEl) {
    SPOTLIGHT (подсветка карточек под курсором)
 ===================================================== */
 
-const SPOTLIGHT_SELECTOR = ".stat, .skill-item, .ai-item, .contact-action, .project-card";
+const SPOTLIGHT_SELECTOR = ".stat, .skill-item, .ai-item, .contact-action, .project-card, .price-card, .faq-item, .stack-tile, .svc-card, .post-card, .link-btn";
 
 if (window.matchMedia("(hover: hover)").matches) {
 
@@ -1232,7 +1354,7 @@ if (contactForm) {
 ===================================================== */
 
 /* --- Бегущая рамка: добавляем .edge во все карточки --- */
-document.querySelectorAll(".stat, .ai-item, .contact-action, .bento-card, .ai-bottom, .project-card").forEach(card => {
+document.querySelectorAll(".stat, .ai-item, .contact-action, .bento-card, .ai-bottom, .project-card, .price-card, .faq-item, .stack-tile, .svc-card, .post-card, .link-btn").forEach(card => {
     if (card.querySelector(":scope > .edge")) return;
     if (getComputedStyle(card).position === "static") card.style.position = "relative";
     const edge = document.createElement("i");
@@ -1334,24 +1456,28 @@ document.querySelectorAll(".stat, .ai-item, .contact-action, .bento-card, .ai-bo
    V6: линия процесса и заглушка фото
 ===================================================== */
 
-/* --- Процесс: линия прорисовывается по мере скролла --- */
-(function processLine() {
-    const list = document.getElementById("processList");
-    if (!list) return;
-    const steps = Array.from(list.querySelectorAll(".process-step"));
+/* --- Процесс и «Мой путь»: линия прорисовывается по мере скролла --- */
+(function processLines() {
+    const lists = Array.from(document.querySelectorAll(".process-list"));
+    if (!lists.length) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let ticking = false;
 
     function update() {
         ticking = false;
-        const rect = list.getBoundingClientRect();
         const vh = window.innerHeight;
         const reach = vh * 0.62;
-        const p = reduce ? 1 : Math.min(1, Math.max(0, (reach - rect.top) / rect.height));
-        list.style.setProperty("--p", p.toFixed(4));
-        steps.forEach(step => {
-            const dot = step.querySelector(".process-dot").getBoundingClientRect();
-            step.classList.toggle("on", reduce || dot.top + dot.height / 2 < reach);
+        lists.forEach(list => {
+            const rect = list.getBoundingClientRect();
+            if (rect.bottom < -50 || rect.top > vh + 50) {
+                if (!reduce && rect.top > vh + 50) list.style.setProperty("--p", "0");
+            }
+            const p = reduce ? 1 : Math.min(1, Math.max(0, (reach - rect.top) / rect.height));
+            list.style.setProperty("--p", p.toFixed(4));
+            list.querySelectorAll(".process-step").forEach(step => {
+                const dot = step.querySelector(".process-dot").getBoundingClientRect();
+                step.classList.toggle("on", reduce || dot.top + dot.height / 2 < reach);
+            });
         });
     }
 
