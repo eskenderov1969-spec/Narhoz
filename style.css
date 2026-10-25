@@ -4312,3 +4312,214 @@ a.post-card:hover {
 @media (min-width: 1001px) {
     .price-head { min-height: 104px; }
 }
+
+
+/* =====================================================
+   V9: КОМПАКТНЕЕ — меньше отступов и крупных размеров,
+   чтобы меньше листать
+===================================================== */
+
+.section { padding: 88px 0; }
+
+.section-heading { margin-bottom: 44px; }
+
+.section-number { margin-bottom: 16px; }
+
+.section-heading h2 {
+    font-size: clamp(38px, 5vw, 64px);
+    letter-spacing: -2.5px;
+}
+
+.lead-text { margin: -18px 0 32px; font-size: 15px; }
+
+.page-top { padding-top: 128px; }
+
+/* hero */
+.hero {
+    min-height: min(100vh, 780px);
+    padding-top: 104px;
+    padding-bottom: 48px;
+}
+
+.hero h1 { font-size: clamp(48px, 7.4vw, 100px); }
+.hero h2 { font-size: clamp(24px, 3.2vw, 40px); }
+
+@media (min-width: 901px) {
+    .hero h1 { font-size: clamp(48px, 6vw, 84px); }
+    .hero-visual { height: 440px; }
+}
+
+/* about */
+.about-main { gap: 56px; }
+.about-photo img { height: 560px; }
+.about-columns { margin-top: 28px; padding-top: 24px; gap: 36px; }
+.about-intro h3 { font-size: clamp(32px, 4vw, 44px); }
+
+.bento-head { margin-top: 56px; }
+.bento { gap: 14px; margin-top: 20px; grid-auto-rows: minmax(150px, auto); }
+.bento-card { padding: 22px; gap: 16px; }
+.b-ai { padding: 28px; }
+.b-ai strong { font-size: 20px; }
+
+/* AI development */
+.ai-main { margin-top: 40px; gap: 56px; }
+.ai-intro h3 { font-size: 38px; margin-bottom: 20px; }
+.ai-item { padding-top: 20px; padding-bottom: 20px; }
+.ai-bottom { margin-top: 44px; }
+
+/* services (липкие карточки) */
+.services .ai-item {
+    min-height: 120px;
+    padding: 26px 32px;
+    margin-bottom: 16px;
+    top: calc(92px + var(--n, 0) * 16px);
+}
+.services .ai-number { font-size: 34px; }
+.services .ai-item-content h3 { font-size: clamp(18px, 2.4vw, 24px); }
+.services .ai-item-content p { font-size: 14px; }
+
+/* процесс и путь */
+.ai-bottom.process { padding: 30px 36px 6px; }
+.process-list { margin-top: 22px; }
+.process-step { padding-bottom: 24px; }
+.process-body h3 { font-size: clamp(18px, 2.4vw, 24px); margin-bottom: 4px; }
+.process-body p { font-size: 14px; }
+
+/* цены */
+.price-card { padding: 26px 24px 24px; gap: 16px; }
+.price-head h3 { font-size: 21px; }
+.price { font-size: clamp(30px, 3.4vw, 38px); }
+.price-list { gap: 9px; }
+.price-note { margin-top: 24px; }
+
+/* проекты */
+.project-filters { margin: -14px 0 24px; }
+.project-grid { gap: 14px; }
+.project-thumb { aspect-ratio: 16 / 9; }
+.project-body { padding: 18px 22px 22px; gap: 10px; }
+.project-body h3 { font-size: 18px; }
+.pa-num { font-size: 56px; }
+
+/* стек */
+.stack-group + .stack-group { margin-top: 26px; }
+.stack-label { margin-bottom: 12px; }
+.stack-tile { padding: 9px 22px 9px 9px; }
+.stack-ico { width: 36px; height: 36px; }
+
+/* FAQ */
+.faq-list { gap: 10px; }
+.faq-item summary { padding: 17px 22px; font-size: 16px; }
+.faq-item p { padding: 0 22px 18px; font-size: 14px; }
+
+/* контакты */
+.contact { padding-top: 72px; padding-bottom: 72px; }
+.contact-cta h3 { font-size: clamp(32px, 4.6vw, 56px); }
+
+/* страницы */
+.svc-card { padding: 28px; gap: 32px; }
+.svc-num { font-size: 34px; margin-bottom: 8px; }
+.svc-main h3 { font-size: clamp(20px, 2.6vw, 26px); }
+.cta-box { margin-top: 40px; padding: 34px 30px; }
+.case-block { padding: 24px 0; }
+.case-meta { padding: 20px 24px; margin-bottom: 28px; }
+.article-body h2 { margin-top: 30px; font-size: 22px; }
+.article-body p, .article-body li { font-size: 16px; line-height: 1.75; }
+
+/* подвал и стрелка */
+.footer { padding: 20px 0; }
+
+@media (max-width: 1000px) {
+    .about-photo img { height: 420px; }
+    .about-main { gap: 36px; }
+    .section { padding: 72px 0; }
+}
+
+@media (max-width: 700px) {
+    .section { padding: 56px 0; }
+    .section-heading { margin-bottom: 28px; }
+    .section-heading h2 { font-size: clamp(32px, 9vw, 44px); letter-spacing: -1.5px; }
+    .lead-text { margin: -10px 0 22px; }
+    .page-top { padding-top: 104px; }
+
+    .hero { min-height: 0; padding-top: 96px; padding-bottom: 40px; }
+    .hero h1 { font-size: clamp(40px, 12.5vw, 56px); letter-spacing: -2px; }
+    .hero h2 { font-size: clamp(22px, 7vw, 28px); }
+    .hero-visual { height: 330px; }
+
+    .about-photo img { height: 320px; }
+    .about-photo.no-photo .photo-ph { min-height: 320px; }
+    .ph-e { font-size: 180px; }
+    .about-intro h3 { font-size: 30px; }
+
+    .bento-head { margin-top: 36px; }
+    .bento-card { padding: 18px; gap: 12px; }
+    .b-ai { padding: 22px; }
+
+    .ai-main { margin-top: 24px; gap: 28px; }
+    .ai-intro h3 { font-size: 30px; }
+
+    .services .ai-item { padding: 20px 20px; min-height: 0; margin-bottom: 12px; top: calc(84px + var(--n, 0) * 12px); }
+    .ai-bottom.process { padding: 22px 18px 2px; }
+    .process-step { padding-bottom: 18px; }
+
+    .price-card { padding: 22px 20px 20px; }
+    .price-grid, .post-grid { gap: 12px; }
+    .project-body { padding: 16px 18px 18px; }
+    .project-thumb { aspect-ratio: 16 / 8; }
+
+    .contact { padding-top: 48px; padding-bottom: 48px; }
+    .contact-cta h3 { font-size: clamp(28px, 9vw, 40px); }
+    .svc-card { padding: 22px 18px; gap: 20px; }
+    .cta-box { margin-top: 28px; padding: 26px 18px; }
+    .bg-word { font-size: clamp(140px, 42vw, 220px); }
+}
+
+/* --- V9.1: ещё чуть плотнее --- */
+.section { padding: 72px 0; }
+.stack-group + .stack-group { margin-top: 20px; }
+.price-head p { font-size: 13px; }
+.contact-form-wrap { margin-top: 36px; }
+.process-step { padding-bottom: 20px; }
+.ai-item-content p { font-size: 14px; }
+
+@media (min-width: 1001px) {
+    .hero { min-height: min(100vh, 700px); }
+    .about-photo img { height: 500px; }
+    .about-photo.no-photo .photo-ph { min-height: 500px; }
+    .project-thumb { aspect-ratio: 16 / 8.5; }
+    .pa-num { font-size: 48px; }
+    .price-head { min-height: 92px; }
+}
+
+@media (max-width: 1000px) {
+    .section { padding: 60px 0; }
+    .price-head { min-height: 0; }
+}
+
+@media (max-width: 700px) {
+    .section { padding: 48px 0; }
+}
+
+/* --- Мобильные: проекты — горизонтальная карусель вместо длинной колонки --- */
+@media (max-width: 700px) {
+    .project-grid {
+        display: flex;
+        gap: 12px;
+        margin-inline: -20px;
+        padding: 4px 20px 10px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: 20px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .project-grid::-webkit-scrollbar { display: none; }
+
+    .project-card {
+        flex: 0 0 82%;
+        scroll-snap-align: start;
+    }
+
+    .project-card .project-body p { font-size: 13px; }
+}
