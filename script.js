@@ -355,7 +355,7 @@ const I18N = {
     "Перейти к содержимому": "Skip to content",
     "Смотреть код": "View code",
     "Демо-лендинг кофейни: меню с вкладками, отзывы и онлайн-бронирование столика.": "Demo landing page for a coffee shop: tabbed menu, reviews and online table booking.",
-    "Демо-лендинг кофейни «Зерно»: меню, отзывы и онлайн-бронь столика. Проект вымышленный, сделан как пример работы.": "A demo landing page for the “Zerno” coffee shop: menu, reviews and online table booking. The project is fictional and made as a sample of my work.",
+    "Демо-лендинг кофейни «Ристретто»: меню, отзывы и онлайн-бронь столика. Проект вымышленный, сделан как пример работы.": "A demo landing page for the “Ristretto” coffee shop: menu, reviews and online table booking. The project is fictional and made as a sample of my work.",
     "Дизайн и разработка": "Design and development",
     "Открыть демо": "Open demo",
     "Показать, как выглядит современный сайт для небольшого заведения: рассказать о кофейне, представить меню с ценами, собрать отзывы и принимать заявки на бронь столика прямо со страницы.": "To show what a modern website for a small venue looks like: tell the story of the coffee shop, present the menu with prices, collect reviews and take table booking requests right from the page.",
