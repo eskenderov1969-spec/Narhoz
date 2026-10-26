@@ -42,4 +42,16 @@
         <changefreq>yearly</changefreq>
         <priority>0.4</priority>
     </url>
+    <url>
+        <loc>https://eskenderov1969-spec.github.io/Narhoz/case-ai.html</loc>
+        <lastmod>2026-10-27</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://eskenderov1969-spec.github.io/Narhoz/ai-demo.html</loc>
+        <lastmod>2026-10-27</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
 </urlset>
