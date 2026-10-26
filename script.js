@@ -353,6 +353,7 @@ if (window.matchMedia) {
 
 const I18N = {
     "Перейти к содержимому": "Skip to content",
+    "Смотреть код": "View code",
     "Демо-лендинг кофейни: меню с вкладками, отзывы и онлайн-бронирование столика.": "Demo landing page for a coffee shop: tabbed menu, reviews and online table booking.",
     "Демо-лендинг кофейни «Зерно»: меню, отзывы и онлайн-бронь столика. Проект вымышленный, сделан как пример работы.": "A demo landing page for the “Zerno” coffee shop: menu, reviews and online table booking. The project is fictional and made as a sample of my work.",
     "Дизайн и разработка": "Design and development",
@@ -1548,4 +1549,170 @@ document.querySelectorAll(".stat, .ai-item, .contact-action, .bento-card, .ai-bo
         render();
         setInterval(render, 60000);
     }, (60 - new Date().getSeconds()) * 1000);
+})();
+
+
+/* =====================================================
+   ПРОСМОТР КОДА: ссылки с data-code открывают окно с исходником
+   (без перехода на GitHub; href остаётся запасным вариантом)
+===================================================== */
+(function codeViewer() {
+
+    const TXT = {
+        ru: { title: "Исходный код", copy: "Копировать", copied: "Код скопирован", close: "Закрыть",
+              loading: "Загружаю код…", error: "Не удалось загрузить код.", gh: "Открыть на GitHub",
+              demo: "Открыть демо", lines: "строк" },
+        en: { title: "Source code", copy: "Copy", copied: "Code copied", close: "Close",
+              loading: "Loading code…", error: "Could not load the code.", gh: "Open on GitHub",
+              demo: "Open demo", lines: "lines" }
+    };
+    const L = () => TXT[currentLang()];
+
+    let modal = null, body = null, lastFocus = null;
+    const cache = {};
+    let current = { path: "", src: "", gh: "" };
+
+    function esc(s) {
+        return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    /* Лёгкая подсветка: комментарии, строки, теги, ключевые слова */
+    function highlight(src) {
+        const re = /(&lt;!--[\s\S]*?--&gt;|\/\*[\s\S]*?\*\/|(?:^|[^:"'\w])\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'|`(?:[^`\\]|\\.)*`)|(&lt;\/?[a-zA-Z][\w-]*)|(\b(?:const|let|var|function|return|if|else|for|while|new|this|true|false|null|typeof|forEach)\b)/gm;
+
+        const wrap = (cls, text) =>
+            text.split("\n").map(p => p ? `<span class="${cls}">${p}</span>` : p).join("\n");
+
+        return esc(src).replace(re, (m, com, str, tag, kw) => {
+            if (com) {
+                /* для «// …» захватывается один символ перед ним — не красим его */
+                const lead = com.match(/^(?:[^\/&])/);
+                if (lead && !com.startsWith("&lt;!--") && !com.startsWith("/*") && !com.startsWith("//")) {
+                    return lead[0] + wrap("tk-c", com.slice(1));
+                }
+                return wrap("tk-c", com);
+            }
+            if (str) return wrap("tk-s", str);
+            if (tag) return wrap("tk-t", tag);
+            return wrap("tk-k", kw);
+        });
+    }
+
+    function toLines(html) {
+        return html.split("\n")
+            .map(l => `<span class="cl">${l === "" ? "&#8203;" : l}</span>`)
+            .join("");
+    }
+
+    function build() {
+        modal = document.createElement("div");
+        modal.className = "code-modal";
+        modal.hidden = true;
+        modal.setAttribute("role", "dialog");
+        modal.setAttribute("aria-modal", "true");
+        modal.setAttribute("aria-labelledby", "codeModalTitle");
+        modal.innerHTML = `
+            <div class="code-modal-backdrop" data-close></div>
+            <div class="code-modal-box">
+                <div class="code-modal-head">
+                    <span class="cm-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="cm-title" id="codeModalTitle"></span>
+                    <span class="cm-meta"></span>
+                    <span class="cm-actions">
+                        <button type="button" class="cm-btn" data-copy></button>
+                        <a class="cm-btn" data-demo target="_blank" rel="noopener"></a>
+                        <button type="button" class="cm-btn cm-close" data-close aria-label="Close">×</button>
+                    </span>
+                </div>
+                <pre class="code-modal-body" tabindex="0"><code></code></pre>
+            </div>`;
+        document.body.appendChild(modal);
+        body = modal.querySelector("code");
+
+        modal.addEventListener("click", (e) => {
+            if (e.target.closest("[data-close]")) close();
+            else if (e.target.closest("[data-copy]")) copy();
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (modal.hidden) return;
+            if (e.key === "Escape") { close(); return; }
+            if (e.key === "Tab") {
+                const f = Array.from(modal.querySelectorAll("button, a[href], pre"))
+                    .filter(el => !el.hidden && el.offsetParent !== null);
+                if (!f.length) return;
+                const first = f[0], last = f[f.length - 1];
+                if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+                else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+            }
+        });
+    }
+
+    function labels() {
+        const t = L();
+        modal.querySelector("[data-copy]").textContent = t.copy;
+        modal.querySelector("[data-close]").setAttribute("aria-label", t.close);
+        const demo = modal.querySelector("[data-demo]");
+        demo.textContent = t.demo + " ↗";
+        demo.href = current.path;
+        modal.querySelector(".code-modal-box").setAttribute("aria-label", t.title);
+    }
+
+    function copy() {
+        const done = () => showToast(L().copied);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(current.src).then(done).catch(fallback);
+        } else fallback();
+        function fallback() {
+            const ta = document.createElement("textarea");
+            ta.value = current.src;
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand("copy"); done(); } catch (e) {}
+            ta.remove();
+        }
+    }
+
+    function close() {
+        modal.hidden = true;
+        document.documentElement.classList.remove("modal-open");
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    async function open(path, gh) {
+        if (!modal) build();
+        lastFocus = document.activeElement;
+        current = { path, src: cache[path] || "", gh };
+        labels();
+        modal.querySelector(".cm-title").textContent = path;
+        modal.querySelector(".cm-meta").textContent = "";
+        body.innerHTML = `<span class="cm-note">${L().loading}</span>`;
+        modal.hidden = false;
+        document.documentElement.classList.add("modal-open");
+        modal.querySelector("[data-close].cm-close").focus();
+
+        try {
+            if (!cache[path]) {
+                const res = await fetch(path, { cache: "no-cache" });
+                if (!res.ok) throw new Error(res.status);
+                cache[path] = await res.text();
+            }
+            current.src = cache[path];
+            body.innerHTML = toLines(highlight(cache[path]));
+            modal.querySelector(".cm-meta").textContent =
+                cache[path].split("\n").length + " " + L().lines;
+            modal.querySelector(".code-modal-body").scrollTop = 0;
+        } catch (err) {
+            body.innerHTML = `<span class="cm-note">${L().error} <a href="${gh}" target="_blank" rel="noopener">${L().gh} ↗</a></span>`;
+        }
+    }
+
+    document.addEventListener("click", (e) => {
+        const a = e.target.closest("a[data-code]");
+        if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        e.preventDefault();
+        open(a.dataset.code, a.href);
+    });
 })();
