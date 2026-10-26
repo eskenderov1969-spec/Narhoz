@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кофейня «Зерно» — свежая обжарка и уютное место в центре</title>
+<meta name="description" content="Демо-лендинг кофейни «Зерно»: авторский кофе, домашняя выпечка, бронирование столика онлайн.">
+<meta name="theme-color" content="#1f1612">
+<meta property="og:title" content="Кофейня «Зерно»">
+<meta property="og:description" content="Свежая обжарка, домашняя выпечка и уютная атмосфера. Демо-проект.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://eskenderov1969-spec.github.io/Narhoz/og-coffee.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://eskenderov1969-spec.github.io/Narhoz/coffee-demo.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://eskenderov1969-spec.github.io/Narhoz/coffee-demo.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1f1612; --bg2:#2a1e18; --card:#34251e; --line:rgba(255,255,255,.09);
+  --text:#f4ece4; --muted:#bfae9f; --accent:#d9964b; --accent2:#f0b968; --ok:#7bc47f;
+  --radius:18px; --max:1120px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:"Playfair Display",Georgia,serif;line-height:1.15;font-weight:700}
+h2{font-size:clamp(28px,4.5vw,42px);margin-bottom:12px}
+.eyebrow{display:inline-block;color:var(--accent2);font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px;font-weight:600}
+.lead{color:var(--muted);max-width:620px}
+section{padding:88px 0}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;font-weight:600;font-size:15px;border:1px solid transparent;cursor:pointer;transition:.2s;font-family:inherit}
+.btn-primary{background:var(--accent);color:#26170c}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-2px)}
+.btn-ghost{border-color:var(--line);color:var(--text);background:transparent}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent2)}
+
+/* header */
+header{position:sticky;top:0;z-index:50;background:rgba(31,22,18,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+.logo{font-family:"Playfair Display",serif;font-size:24px;font-weight:700}
+.logo span{color:var(--accent)}
+nav ul{display:flex;gap:28px;list-style:none;font-size:14px;color:var(--muted)}
+nav a:hover{color:var(--text)}
+.burger{display:none;background:none;border:0;color:var(--text);font-size:26px;cursor:pointer}
+@media(max-width:820px){
+  .burger{display:block}
+  nav ul{position:absolute;top:66px;left:0;right:0;flex-direction:column;gap:0;background:var(--bg2);border-bottom:1px solid var(--line);display:none}
+  nav ul.open{display:flex}
+  nav li a{display:block;padding:16px 20px;border-top:1px solid var(--line)}
+  .nav .btn{display:none}
+}
+
+/* hero */
+.hero{padding:96px 0 80px;position:relative;overflow:hidden;
+  background:radial-gradient(900px 500px at 85% 10%,rgba(217,150,75,.22),transparent 60%),radial-gradient(600px 400px at 0% 100%,rgba(217,150,75,.10),transparent 60%)}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(38px,6.5vw,68px);margin-bottom:20px}
+.hero h1 em{font-style:normal;color:var(--accent2)}
+.hero p{color:var(--muted);font-size:18px;max-width:520px;margin-bottom:32px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+.stats{display:flex;gap:36px;margin-top:44px;flex-wrap:wrap}
+.stats b{display:block;font-family:"Playfair Display",serif;font-size:30px;color:var(--accent2)}
+.stats span{font-size:13px;color:var(--muted)}
+.cup{aspect-ratio:1;border-radius:50%;max-width:440px;margin:0 auto;width:100%;
+  background:radial-gradient(circle at 35% 30%,#f0b968 0,#d9964b 22%,#8a4f22 55%,#3b2315 100%);
+  box-shadow:0 40px 80px rgba(0,0,0,.5),inset 0 0 60px rgba(0,0,0,.35);position:relative;display:grid;place-items:center}
+.cup::before{content:"";position:absolute;inset:11%;border-radius:50%;border:2px dashed rgba(255,255,255,.25)}
+.cup span{font-size:110px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.4))}
+.badge{position:absolute;background:var(--card);border:1px solid var(--line);padding:10px 16px;border-radius:14px;font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.badge.b1{left:-6%;bottom:14%}.badge.b2{right:-4%;top:10%}
+@media(max-width:820px){.hero-grid{grid-template-columns:1fr}.cup{max-width:300px;order:-1}.badge.b1{left:0}.badge.b2{right:0}}
+
+/* features */
+.features{background:var(--bg2)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px;transition:.25s}
+.card:hover{transform:translateY(-5px);border-color:rgba(217,150,75,.5)}
+.card .ic{width:50px;height:50px;border-radius:14px;background:rgba(217,150,75,.15);display:grid;place-items:center;font-size:24px;margin-bottom:18px}
+.card h3{font-size:21px;margin-bottom:8px}
+.card p{color:var(--muted);font-size:15px}
+@media(max-width:820px){.grid3{grid-template-columns:1fr}}
+
+/* menu */
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:32px 0 28px}
+.tab{background:transparent;border:1px solid var(--line);color:var(--muted);padding:10px 20px;border-radius:999px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:500;transition:.2s}
+.tab:hover{color:var(--text);border-color:var(--accent)}
+.tab.active{background:var(--accent);color:#26170c;border-color:var(--accent)}
+.menu-list{display:grid;grid-template-columns:1fr 1fr;gap:6px 48px}
+.item{display:flex;justify-content:space-between;gap:16px;padding:18px 0;border-bottom:1px dashed var(--line)}
+.item h3{font-family:Inter,sans-serif;font-size:17px;font-weight:600;margin-bottom:2px}
+.item p{color:var(--muted);font-size:14px}
+.item .price{color:var(--accent2);font-weight:600;white-space:nowrap}
+@media(max-width:820px){.menu-list{grid-template-columns:1fr}}
+
+/* reviews */
+.reviews{background:var(--bg2)}
+.rev .stars{color:var(--accent2);letter-spacing:3px;margin-bottom:12px}
+.rev p{font-size:15px;margin-bottom:18px}
+.rev .who{display:flex;align-items:center;gap:12px;font-size:14px}
+.rev .av{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#26170c;display:grid;place-items:center;font-weight:700}
+.rev .who small{display:block;color:var(--muted)}
+
+/* booking */
+.book-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+form{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:32px;display:grid;gap:16px}
+label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+input,select,textarea{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);padding:13px 14px;border-radius:12px;font-family:inherit;font-size:15px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);border-color:transparent}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.msg{display:none;padding:14px 16px;border-radius:12px;font-size:14px}
+.msg.ok{display:block;background:rgba(123,196,127,.14);color:var(--ok)}
+.msg.err{display:block;background:rgba(224,100,90,.14);color:#e8887f}
+.info-list{list-style:none;display:grid;gap:18px;margin-top:28px}
+.info-list li{display:flex;gap:14px}
+.info-list .ic{font-size:22px}
+.info-list b{display:block}
+.info-list span{color:var(--muted);font-size:15px}
+@media(max-width:820px){.book-grid{grid-template-columns:1fr}.row{grid-template-columns:1fr}}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:32px 0;color:var(--muted);font-size:14px}
+.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{color:var(--accent2)}
+footer a:hover{text-decoration:underline}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#top" class="logo">Зерно<span>.</span></a>
+    <nav>
+      <ul id="menu">
+        <li><a href="#about">О нас</a></li>
+        <li><a href="#menu-section">Меню</a></li>
+        <li><a href="#reviews">Отзывы</a></li>
+        <li><a href="#book">Бронь</a></li>
+        <li><a href="#contacts">Контакты</a></li>
+      </ul>
+    </nav>
+    <a href="#book" class="btn btn-primary">Забронировать</a>
+    <button class="burger" id="burger" aria-label="Открыть меню">☰</button>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Кофейня · свежая обжарка</span>
+      <h1>Кофе, который <em>хочется</em> растянуть на весь вечер</h1>
+      <p>Обжариваем зерно каждую неделю, печём выпечку по утрам и оставляем для вас лучший столик у окна.</p>
+      <div class="hero-cta">
+        <a href="#book" class="btn btn-primary">Забронировать столик</a>
+        <a href="#menu-section" class="btn btn-ghost">Смотреть меню</a>
+      </div>
+      <div class="stats">
+        <div><b>12</b><span>сортов зерна</span></div>
+        <div><b>4.9</b><span>средняя оценка</span></div>
+        <div><b>7:30</b><span>открываемся</span></div>
+      </div>
+    </div>
+    <div class="cup" aria-hidden="true">
+      <span>☕</span>
+      <div class="badge b1">🥐 Выпечка каждое утро</div>
+      <div class="badge b2">🌱 Зерно от малых ферм</div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="about">
+  <div class="wrap">
+    <span class="eyebrow">О нас</span>
+    <h2>Три причины зайти к нам</h2>
+    <p class="lead">Мы небольшая команда, которая любит свою работу. Поэтому в каждой чашке и каждой булочке видно внимание к деталям.</p>
+    <div class="grid3">
+      <div class="card reveal"><div class="ic">🔥</div><h3>Своя обжарка</h3><p>Зерно обжариваем маленькими партиями и подаём в течение двух недель после обжарки, пока вкус раскрыт полностью.</p></div>
+      <div class="card reveal"><div class="ic">🥐</div><h3>Выпечка с утра</h3><p>Круассаны, чизкейки и сезонные пироги готовим на месте. К вечеру что-то заканчивается, поэтому приходите пораньше.</p></div>
+      <div class="card reveal"><div class="ic">🛋️</div><h3>Уютная атмосфера</h3><p>Мягкий свет, розетки у каждого стола и бесплатный Wi-Fi. Можно поработать, встретиться с друзьями или просто посидеть с книгой.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="menu-section">
+  <div class="wrap">
+    <span class="eyebrow">Меню</span>
+    <h2>Что мы готовим</h2>
+    <p class="lead">Цены в рублях. Альтернативное молоко (овсяное, миндальное) — без доплаты.</p>
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-cat="coffee" role="tab">Кофе</button>
+      <button class="tab" data-cat="tea" role="tab">Чай и напитки</button>
+      <button class="tab" data-cat="food" role="tab">Выпечка и десерты</button>
+    </div>
+    <div class="menu-list" id="menuList"></div>
+  </div>
+</section>
+
+<section class="reviews" id="reviews">
+  <div class="wrap">
+    <span class="eyebrow">Отзывы</span>
+    <h2>Гости о «Зерне»</h2>
+    <div class="grid3">
+      <div class="card rev reveal"><div class="stars">★★★★★</div><p>Лучший флэт уайт в районе. Приходим сюда каждые выходные, а бариста уже знает наш заказ.</p><div class="who"><div class="av">А</div><div>Анна<small>постоянный гость</small></div></div></div>
+      <div class="card rev reveal"><div class="stars">★★★★★</div><p>Отличное место для работы: тихо, есть розетки и быстрый интернет. Круассан с миндалём — огонь.</p><div class="who"><div class="av">М</div><div>Максим<small>фрилансер</small></div></div></div>
+      <div class="card rev reveal"><div class="stars">★★★★★</div><p>Бронировали столик на день рождения подруги. Всё организовали, а торт сделали по нашей просьбе.</p><div class="who"><div class="av">Е</div><div>Елена<small>отмечали праздник</small></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="book">
+  <div class="wrap book-grid">
+    <div>
+      <span class="eyebrow">Бронь</span>
+      <h2>Забронируйте столик</h2>
+      <p class="lead">Оставьте заявку, и мы подтвердим бронь по телефону в течение 15 минут в рабочее время.</p>
+      <ul class="info-list" id="contacts">
+        <li><span class="ic">📍</span><div><b>Адрес</b><span>ул. Кофейная, 12 (демо-адрес)</span></div></li>
+        <li><span class="ic">🕒</span><div><b>Часы работы</b><span>Пн–Пт 7:30–22:00, Сб–Вс 9:00–23:00</span></div></li>
+        <li><span class="ic">📞</span><div><b>Телефон</b><span>+7 (000) 000-00-00</span></div></li>
+      </ul>
+    </div>
+    <form id="bookForm" novalidate>
+      <div class="row">
+        <div><label for="name">Имя</label><input id="name" name="name" type="text" placeholder="Как вас зовут" required></div>
+        <div><label for="phone">Телефон</label><input id="phone" name="phone" type="tel" placeholder="+7 ___ ___-__-__" required></div>
+      </div>
+      <div class="row">
+        <div><label for="date">Дата</label><input id="date" name="date" type="date" required></div>
+        <div><label for="time">Время</label><input id="time" name="time" type="time" value="19:00" required></div>
+      </div>
+      <div>
+        <label for="guests">Количество гостей</label>
+        <select id="guests" name="guests">
+          <option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7+</option>
+        </select>
+      </div>
+      <div><label for="comment">Пожелания (необязательно)</label><textarea id="comment" name="comment" rows="3" placeholder="Например, столик у окна"></textarea></div>
+      <button class="btn btn-primary" type="submit">Отправить заявку</button>
+      <div class="msg" id="formMsg" role="status"></div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>© 2026 Кофейня «Зерно». Демонстрационный проект, все данные вымышленные.</div>
+    <div>Сделано <a href="https://eskenderov1969-spec.github.io/Narhoz/">ESKENDEROV</a></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // mobile menu
+  var burger=document.getElementById('burger'), menu=document.getElementById('menu');
+  burger.addEventListener('click',function(){menu.classList.toggle('open')});
+  menu.addEventListener('click',function(e){if(e.target.tagName==='A')menu.classList.remove('open')});
+
+  // menu data
+  var data={
+    coffee:[
+      ['Эспрессо','Двойной, насыщенный, с сладким послевкусием',150],
+      ['Американо','Эспрессо с горячей водой',170],
+      ['Капучино','Классика с плотной молочной пенкой',230],
+      ['Флэт уайт','Двойной эспрессо и бархатное молоко',260],
+      ['Латте','Нежный и мягкий, с любым молоком',250],
+      ['Раф','Сливочный, с ванильным сахаром',290],
+      ['Фильтр-кофе','Сорт недели, спросите у бариста',240],
+      ['Айс-латте','Холодный кофе со льдом',270]
+    ],
+    tea:[
+      ['Чёрный чай','Ассам, подаётся в чайнике',200],
+      ['Зелёный чай','Сенча с лёгкой травяной нотой',200],
+      ['Облепиховый чай','Облепиха, апельсин, мёд',280],
+      ['Матча-латте','Японская матча на молоке',290],
+      ['Горячий шоколад','Густой, на настоящем шоколаде',270],
+      ['Домашний лимонад','Цитрус, мята, содовая',250]
+    ],
+    food:[
+      ['Круассан с миндалём','Свежий, с кремом франжипан',210],
+      ['Чизкейк Нью-Йорк','Классический, с ягодным соусом',320],
+      ['Морковный пирог','Со сливочным кремом и грецким орехом',290],
+      ['Сэндвич с индейкой','На домашнем хлебе, с овощами',350],
+      ['Сырники','Со сметаной и вареньем',310],
+      ['Печенье с шоколадом','Пекём каждое утро',120]
+    ]
+  };
+  var list=document.getElementById('menuList');
+  function render(cat){
+    list.innerHTML='';
+    data[cat].forEach(function(i){
+      var d=document.createElement('div');d.className='item';
+      var l=document.createElement('div');
+      var h=document.createElement('h3');h.textContent=i[0];
+      var p=document.createElement('p');p.textContent=i[1];
+      l.appendChild(h);l.appendChild(p);
+      var pr=document.createElement('div');pr.className='price';pr.textContent=i[2]+' ₽';
+      d.appendChild(l);d.appendChild(pr);list.appendChild(d);
+    });
+  }
+  render('coffee');
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active')});
+      t.classList.add('active');render(t.dataset.cat);
+    });
+  });
+
+  // reveal on scroll
+  var els=document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(en){
+      en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+    },{threshold:.15});
+    els.forEach(function(e){io.observe(e)});
+  } else {els.forEach(function(e){e.classList.add('in')})}
+
+  // date min = today
+  var d=document.getElementById('date');
+  var t=new Date();
+  var iso=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
+  d.min=iso;d.value=iso;
+
+  // form (demo: no server)
+  var form=document.getElementById('bookForm'), msg=document.getElementById('formMsg');
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var name=form.name.value.trim(), phone=form.phone.value.replace(/\D/g,'');
+    if(name.length<2){msg.className='msg err';msg.textContent='Укажите имя.';return}
+    if(phone.length<10){msg.className='msg err';msg.textContent='Проверьте номер телефона.';return}
+    msg.className='msg ok';
+    msg.textContent='Спасибо, '+name+'! Заявка принята (демо-режим: данные никуда не отправляются).';
+    form.reset();d.value=iso;
+  });
+})();
+</script>
+</body>
+</html>
