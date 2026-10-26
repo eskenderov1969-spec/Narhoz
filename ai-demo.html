@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Лина — AI-ассистент магазина «Северный свет»</title>
+<meta name="description" content="Демо AI-ассистента поддержки: отвечает на вопросы о доставке и оплате, подбирает светильник, проверяет статус заказа и оформляет заявку на звонок.">
+<meta name="theme-color" content="#0d0f1a">
+<meta property="og:title" content="Лина — AI-ассистент магазина «Северный свет»">
+<meta property="og:description" content="Демо-чат: ответы на вопросы, подбор товара, статус заказа, заявка на звонок.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://eskenderov1969-spec.github.io/Narhoz/og-ai.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://eskenderov1969-spec.github.io/Narhoz/ai-demo.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://eskenderov1969-spec.github.io/Narhoz/ai-demo.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0f1a; --panel:#141830; --panel2:#1a1f3d; --line:rgba(160,170,255,.14);
+  --text:#eceefb; --muted:#9aa0c4; --accent:#7c6cff; --accent2:#4fd1ff; --user:#7c6cff; --bot:#1c2142;
+  --ok:#5be0a0; --radius:20px;
+}
+[data-theme="light"]{
+  --bg:#f3f4fb; --panel:#ffffff; --panel2:#eef0fb; --line:rgba(40,50,120,.12);
+  --text:#161a33; --muted:#5d638a; --bot:#ffffff; --ok:#12915a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;overflow:hidden}
+body::before{content:"";position:fixed;inset:-20%;z-index:0;pointer-events:none;
+  background:radial-gradient(600px 420px at 15% 10%,rgba(124,108,255,.28),transparent 65%),radial-gradient(520px 380px at 90% 85%,rgba(79,209,255,.18),transparent 65%);
+  animation:aurora 14s ease-in-out infinite alternate}
+@keyframes aurora{to{transform:translate(3%,2%) scale(1.06)}}
+button{font-family:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+
+.app{position:relative;z-index:1;height:100%;max-width:1180px;margin:0 auto;padding:22px;display:grid;grid-template-columns:300px 1fr;gap:20px}
+
+/* sidebar */
+.side{display:flex;flex-direction:column;gap:16px;min-height:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius)}
+.profile{padding:22px;text-align:center}
+.avatar{width:84px;height:84px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;font-size:36px;font-weight:800;color:#fff;
+  background:conic-gradient(from 200deg,#7c6cff,#4fd1ff,#7c6cff);position:relative;box-shadow:0 14px 34px -10px rgba(124,108,255,.8)}
+.avatar::after{content:"";position:absolute;right:4px;bottom:4px;width:16px;height:16px;border-radius:50%;background:var(--ok);border:3px solid var(--panel)}
+.profile h1{font-size:21px;letter-spacing:-.01em}
+.profile p{color:var(--muted);font-size:13.5px;margin-top:4px}
+.shop{display:inline-block;margin-top:12px;padding:5px 12px;border-radius:999px;background:var(--panel2);font-size:12px;color:var(--muted)}
+.topics{padding:18px;display:flex;flex-direction:column;gap:6px;overflow:auto;min-height:0}
+.topics h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:600}
+.topic{display:flex;align-items:center;gap:12px;text-align:left;background:transparent;border:1px solid transparent;border-radius:14px;padding:10px 12px;font-size:14px;cursor:pointer;transition:.2s}
+.topic:hover{background:var(--panel2);border-color:var(--line);transform:translateX(3px)}
+.topic span{width:34px;height:34px;border-radius:11px;background:var(--panel2);display:grid;place-items:center;font-size:17px;flex:none}
+.note{font-size:12px;color:var(--muted);padding:0 6px}
+
+/* chat */
+.chat{display:flex;flex-direction:column;min-height:0;overflow:hidden;position:relative}
+.chat-head{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.chat-head .mini{width:38px;height:38px;border-radius:50%;background:conic-gradient(from 200deg,#7c6cff,#4fd1ff,#7c6cff);display:grid;place-items:center;font-weight:800;color:#fff;font-size:16px}
+.chat-head b{display:block;font-size:15px}
+.chat-head small{color:var(--ok);font-size:12px}
+.head-actions{margin-left:auto;display:flex;gap:8px}
+.icon-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);cursor:pointer;font-size:16px;transition:.2s;display:grid;place-items:center}
+.icon-btn:hover{border-color:var(--accent);transform:translateY(-2px)}
+#sideToggle{display:none}
+.log{flex:1;overflow-y:auto;padding:22px 18px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
+.msg{display:flex;gap:10px;max-width:86%;animation:pop .35s cubic-bezier(.2,.8,.2,1) both}
+.msg.me{align-self:flex-end;flex-direction:row-reverse}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.97)}}
+.msg .ava{width:30px;height:30px;border-radius:50%;flex:none;background:conic-gradient(from 200deg,#7c6cff,#4fd1ff,#7c6cff);display:grid;place-items:center;color:#fff;font-size:13px;font-weight:800;margin-top:2px}
+.bubble{padding:12px 16px;border-radius:18px;font-size:15px;border:1px solid var(--line);background:var(--bot);box-shadow:0 8px 24px -16px rgba(0,0,0,.5)}
+.bubble p+p{margin-top:8px}
+.bubble ul{margin:8px 0 0 18px}
+.bubble li{margin:2px 0}
+.bubble b{font-weight:700}
+.bubble code{background:var(--panel2);padding:1px 6px;border-radius:6px;font-size:13px}
+.me .bubble{background:linear-gradient(135deg,#7c6cff,#5a6bff);color:#fff;border-color:transparent;border-bottom-right-radius:6px}
+.bot .bubble{border-bottom-left-radius:6px}
+.time{font-size:11px;color:var(--muted);margin-top:4px}
+.me .time{text-align:right}
+.typing .bubble{display:flex;gap:5px;padding:16px 18px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:dot 1.1s infinite}
+.typing i:nth-child(2){animation-delay:.18s}.typing i:nth-child(3){animation-delay:.36s}
+@keyframes dot{0%,60%,100%{opacity:.3;transform:none}30%{opacity:1;transform:translateY(-4px)}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{border:1px solid var(--accent);background:transparent;color:var(--text);padding:8px 14px;border-radius:999px;font-size:13.5px;cursor:pointer;transition:.2s}
+.chip:hover{background:var(--accent);color:#fff;transform:translateY(-2px)}
+.chips.used .chip{opacity:.4;pointer-events:none}
+
+.composer{display:flex;gap:10px;padding:14px 16px;border-top:1px solid var(--line);background:var(--panel)}
+.composer input{flex:1;background:var(--panel2);border:1px solid var(--line);color:var(--text);padding:14px 18px;border-radius:999px;font-family:inherit;font-size:15px;transition:.2s}
+.composer input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(124,108,255,.18)}
+.send{width:50px;height:50px;border-radius:50%;border:0;cursor:pointer;background:linear-gradient(135deg,#7c6cff,#4fd1ff);color:#fff;font-size:20px;transition:.2s;flex:none}
+.send:hover{transform:scale(1.08) rotate(-8deg)}
+.send:disabled{opacity:.5;cursor:default;transform:none}
+
+@media(max-width:860px){
+  body{overflow:auto}
+  html,body{height:auto}
+  .app{grid-template-columns:1fr;height:100dvh;padding:10px;gap:10px}
+  .side{position:fixed;inset:0;z-index:20;background:rgba(5,6,15,.78);backdrop-filter:blur(8px);padding:14px;overflow:auto;display:none}
+  .side.open{display:flex}
+  #sideToggle{display:grid}
+  .msg{max-width:94%}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.log{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <aside class="side" id="side" aria-label="О ассистенте">
+    <div class="card profile">
+      <div class="avatar" aria-hidden="true">Л</div>
+      <h1>Лина</h1>
+      <p>AI-ассистент поддержки</p>
+      <span class="shop">Магазин светильников «Северный свет»</span>
+    </div>
+    <div class="card topics">
+      <h2>Что я умею</h2>
+      <button class="topic" data-q="Как доставляете?"><span>🚚</span>Доставка</button>
+      <button class="topic" data-q="Какие способы оплаты?"><span>💳</span>Оплата</button>
+      <button class="topic" data-q="Подобрать светильник"><span>💡</span>Подобрать светильник</button>
+      <button class="topic" data-q="Где мой заказ?"><span>📦</span>Статус заказа</button>
+      <button class="topic" data-q="Условия возврата"><span>↩️</span>Возврат и гарантия</button>
+      <button class="topic" data-q="Хочу промокод"><span>🎁</span>Скидки</button>
+      <button class="topic" data-q="Перезвоните мне"><span>📞</span>Заказать звонок</button>
+    </div>
+    <p class="note">Это демо-проект: магазин и данные вымышленные. Ответы строятся по базе знаний в коде страницы.</p>
+  </aside>
+
+  <main class="card chat" aria-label="Чат с ассистентом">
+    <div class="chat-head">
+      <div class="mini" aria-hidden="true">Л</div>
+      <div><b>Лина</b><small>● онлайн</small></div>
+      <div class="head-actions">
+        <button class="icon-btn" id="sideToggle" type="button" aria-label="Темы">☰</button>
+        <button class="icon-btn" id="themeBtn" type="button" aria-label="Сменить тему">🌓</button>
+        <button class="icon-btn" id="clearBtn" type="button" aria-label="Очистить чат">🗑</button>
+      </div>
+    </div>
+    <div class="log" id="log" role="log" aria-live="polite"></div>
+    <form class="composer" id="form" autocomplete="off">
+      <input id="input" type="text" placeholder="Напишите вопрос…" aria-label="Сообщение" maxlength="300">
+      <button class="send" id="send" type="submit" aria-label="Отправить">➤</button>
+    </form>
+  </main>
+
+</div>
+
+<script>
+(function(){
+  var log=document.getElementById('log'), form=document.getElementById('form'),
+      input=document.getElementById('input'), send=document.getElementById('send'),
+      side=document.getElementById('side');
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var userName='', pending=null, flow={}, busy=false;
+
+  /* ---------- база знаний ---------- */
+  var KB=[
+    {id:'hello',keys:['привет','здравств','добрый','хай','hello','салют'],a:function(){return [greet()+(userName?', '+userName:'')+'! Я Лина, ассистент магазина «Северный свет». Помогу с доставкой, оплатой, подбором светильника и статусом заказа.']},chips:['Подобрать светильник','Как доставляете?','Где мой заказ?']},
+    {id:'delivery',keys:['доставк','доставля','привез','курьер','сдэк','самовывоз','пункт','срок'],a:function(){return ['Доставляем по всей России:',['**Курьер по Москве и области:** 1–2 дня, 290 ₽','**СДЭК и Почта России:** 3–7 дней, от 350 ₽','**Самовывоз** из шоурума на Лесной, 14: бесплатно, готово через 2 часа'],'При заказе от **5 000 ₽** доставка курьером бесплатная.']},chips:['Какие способы оплаты?','Где мой заказ?']},
+    {id:'pay',keys:['оплат','карт','рассрочк','наличн','сбп','платить','платеж'],a:function(){return ['Принимаем разные способы оплаты:',['Банковская карта и СБП на сайте','Наличными или картой при получении','Рассрочка на 6 месяцев без переплаты от 8 000 ₽'],'Платёжные данные защищены, мы их не храним.']},chips:['Как доставляете?','Хочу промокод']},
+    {id:'return',keys:['возврат','вернуть','обмен','гаранти','сломал','брак','не работает'],a:function(){return ['Всё просто:',['**14 дней** на возврат, если товар не подошёл и сохранил вид','**2 года гарантии** на светильники и **1 год** на лампы','При браке заберём товар за наш счёт и вернём деньги или заменим'],'Для заявки понадобится номер заказа. Если хотите, я передам обращение менеджеру.']},chips:['Перезвоните мне','Где мой заказ?']},
+    {id:'promo',keys:['промокод','скидк','акци','купон','дешевл','подарок'],a:function(){return ['Для первого заказа действует промокод **WELCOME10**: скидка 10% на всё, кроме товаров по акции.',"Ещё при подписке на рассылку присылаем персональные предложения раз в месяц."]},chips:['Как доставляете?','Подобрать светильник']},
+    {id:'hours',keys:['часы','работает','график','время работы','открыт','до скольки'],a:function(){return ['Мы на связи **ежедневно с 9:00 до 21:00** по Москве. Чат работает круглосуточно, а менеджеры подключаются в рабочие часы.']},chips:['Перезвоните мне']},
+    {id:'contacts',keys:['контакт','телефон','адрес','где находитесь','шоурум','почта','email'],a:function(){return ['Наши контакты (демо):',['Телефон: +7 (000) 000-00-00','Почта: hello@example.com','Шоурум: Москва, ул. Лесная, 14']]},chips:['Перезвоните мне']},
+    {id:'who',keys:['кто ты','ты бот','ты робот','ты человек','как тебя зовут','ты нейросеть','ты ии','ты ai'],a:function(){return ['Я Лина, виртуальный ассистент. Честно: это демо-версия, и мои ответы строятся по заранее подготовленной базе знаний, без настоящей языковой модели.','В боевой версии такой чат подключают к LLM API и к данным магазина, чтобы он отвечал на любые вопросы и видел реальные заказы.']},chips:['Что ты умеешь?']},
+    {id:'can',keys:['умеешь','можешь','помощь','помоги','что ты','команд'],a:function(){return ['Я могу:',['рассказать про доставку, оплату, возврат и скидки','подобрать светильник по шагам','проверить статус заказа по номеру','оформить заявку на звонок менеджера'],'С чего начнём?']},chips:['Подобрать светильник','Где мой заказ?','Перезвоните мне']},
+    {id:'thanks',keys:['спасибо','благодар','круто','отлично','супер'],a:function(){return ['Пожалуйста'+(userName?', '+userName:'')+'! Если появятся ещё вопросы, я здесь.']},chips:[]},
+    {id:'bye',keys:['пока','до свидания','увидимся'],a:function(){return ['До встречи'+(userName?', '+userName:'')+'! Хорошего вечера 🌙']},chips:[]}
+  ];
+  var PICK={
+    'Гостиная':['Люстра **«Аврора»** с диммером: 12 900 ₽','Торшер **«Фьорд»** для мягкого света: 6 400 ₽'],
+    'Спальня':['Бра **«Луна»** с тёплым светом: 3 200 ₽','Настольная лампа **«Сумерки»** с сенсорным управлением: 2 900 ₽'],
+    'Кухня':['Подвесной светильник **«Нордик»**: 4 700 ₽','LED-лента **«Линия»** для рабочей зоны: 1 800 ₽'],
+    'Кабинет':['Настольная лампа **«Фокус»** с регулировкой яркости: 3 900 ₽','Потолочный светильник **«Ясный день»**: 5 600 ₽']
+  };
+
+  /* ---------- утилиты ---------- */
+  function greet(){var h=new Date().getHours();return h<5?'Доброй ночи':h<12?'Доброе утро':h<18?'Добрый день':'Добрый вечер'}
+  function norm(s){return s.toLowerCase().replace(/ё/g,'е').replace(/[^a-zа-я0-9\- ]/g,' ').replace(/\s+/g,' ').trim()}
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+  function fmt(s){return esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')}
+  function now(){var d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
+  function scroll(){log.scrollTop=log.scrollHeight}
+  function sleep(ms){return new Promise(function(r){setTimeout(r,reduce?0:ms)})}
+
+  function bubbleHTML(parts){
+    return parts.map(function(p){
+      if(Array.isArray(p)) return '<ul>'+p.map(function(i){return '<li>'+fmt(i)+'</li>'}).join('')+'</ul>';
+      return '<p>'+fmt(p)+'</p>';
+    }).join('');
+  }
+
+  function addMsg(who,html){
+    var row=document.createElement('div');row.className='msg '+who;
+    var ava=who==='bot'?'<div class="ava" aria-hidden="true">Л</div>':'';
+    row.innerHTML=ava+'<div><div class="bubble">'+html+'</div><div class="time">'+now()+'</div></div>';
+    log.appendChild(row);scroll();return row;
+  }
+  function addUser(text){addMsg('me','<p>'+esc(text)+'</p>')}
+
+  function addChips(row,list){
+    if(!list||!list.length) return;
+    var box=document.createElement('div');box.className='chips';
+    list.forEach(function(t){
+      var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=t;
+      b.addEventListener('click',function(){box.classList.add('used');handle(t)});
+      box.appendChild(b);
+    });
+    row.querySelector('.bubble').appendChild(box);scroll();
+  }
+
+  async function botSay(parts,chips){
+    busy=true;send.disabled=true;
+    var t=document.createElement('div');t.className='msg bot typing';
+    t.innerHTML='<div class="ava" aria-hidden="true">Л</div><div class="bubble"><i></i><i></i><i></i></div>';
+    log.appendChild(t);scroll();
+    var len=parts.join(' ').length;
+    await sleep(Math.min(450+len*6,1500));
+    t.remove();
+    var row=addMsg('bot',bubbleHTML(parts));
+    addChips(row,chips);
+    busy=false;send.disabled=false;
+    if(window.matchMedia('(min-width:861px)').matches) input.focus();
+  }
+
+  /* ---------- логика диалога ---------- */
+  function score(text){
+    var best=null,max=0;
+    KB.forEach(function(k){
+      var s=0;
+      k.keys.forEach(function(key){if(text.indexOf(key)!==-1)s+=key.length>4?2:1});
+      if(s>max){max=s;best=k}
+    });
+    return best;
+  }
+  function extractName(raw){
+    var m=raw.match(/(?:[Мм]еня зовут|[Мм]ое имя|[Мм]оё имя|\bЯ)\s+([А-ЯЁ][а-яё]{1,20})/);
+    return m?m[1].charAt(0).toUpperCase()+m[1].slice(1).toLowerCase():'';
+  }
+  function orderStatus(num){
+    var last=parseInt(num.slice(-1),10);
+    var st=[
+      ['Собираем заказ на складе','Отправим сегодня вечером'],
+      ['Заказ передан в службу доставки','Ожидайте звонок курьера'],
+      ['Заказ в пути','Прибудет завтра с 10:00 до 18:00'],
+      ['Заказ ждёт вас в пункте выдачи','Хранение 5 дней'],
+      ['Заказ доставлен','Спасибо, что выбрали нас!']
+    ][last%5];
+    return ['Заказ **СС-'+num+'**: '+st[0]+'.',st[1]+'.'];
+  }
+
+  async function handle(raw){
+    var text=raw.trim();if(!text||busy)return;
+    addUser(text);
+    var n=norm(text);
+
+    /* шаги сценариев */
+    if(pending==='order'){
+      var m=n.match(/(\d{5})/);
+      if(m){pending=null;return botSay(orderStatus(m[1]),['Перезвоните мне','Условия возврата']);}
+      if(/отмена|не знаю|нет/.test(n)){pending=null;return botSay(['Хорошо. Если найдёте номер, он указан в письме с подтверждением. Могу передать вопрос менеджеру.'],['Перезвоните мне']);}
+      return botSay(['Не вижу номера. Он состоит из 5 цифр, например **СС-48213**. Напишите его или скажите «отмена».']);
+    }
+    if(pending==='room'){
+      var room=Object.keys(PICK).filter(function(r){return n.indexOf(norm(r).slice(0,5))!==-1})[0];
+      if(room){pending=null;return botSay(['Для комнаты «'+room.toLowerCase()+'» советую:',PICK[room],'Все модели есть в наличии. Для первого заказа действует промокод **WELCOME10**.'],['Как доставляете?','Хочу промокод']);}
+      return botSay(['Выберите комнату из вариантов ниже или напишите её название.'],Object.keys(PICK));
+    }
+    if(pending==='cb-name'){
+      var nm=extractName(text)||text.replace(/[^А-Яа-яЁёA-Za-z \-]/g,'').trim().split(' ')[0];
+      if(!nm||nm.length<2)return botSay(['Как к вам обращаться? Напишите имя.']);
+      flow.name=nm.charAt(0).toUpperCase()+nm.slice(1);userName=flow.name;pending='cb-phone';
+      return botSay(['Приятно познакомиться, '+flow.name+'! Оставьте номер телефона, и менеджер перезвонит в течение 15 минут в рабочее время.']);
+    }
+    if(pending==='cb-phone'){
+      var digits=text.replace(/\D/g,'');
+      if(digits.length<10)return botSay(['Проверьте номер: нужно минимум 10 цифр. Например, +7 900 123-45-67.']);
+      pending=null;
+      return botSay(['Готово, заявка принята ✅',['Имя: **'+flow.name+'**','Телефон: **'+text.trim()+'**'],'Это демо-режим: данные никуда не отправляются.'],['Подобрать светильник']);
+    }
+
+    /* имя из свободной фразы */
+    var found=extractName(text);
+    if(found&&!userName){userName=found;return botSay(['Приятно познакомиться, '+userName+'! Чем могу помочь?'],['Подобрать светильник','Как доставляете?','Где мой заказ?']);}
+
+    /* запуск сценариев */
+    if(/где мой заказ|статус|отследить|номер заказа|мой заказ/.test(n)){
+      pending='order';
+      return botSay(['Проверю статус. Напишите номер заказа, например **СС-48213**.','Для демо подойдёт любой номер из 5 цифр.']);
+    }
+    if(/подобрат|подбери|посоветуй|выбрат|какой светильник|люстр|лампу|торшер/.test(n)){
+      pending='room';
+      return botSay(['Давайте подберём. Для какой комнаты ищете свет?'],Object.keys(PICK));
+    }
+    if(/перезвон|позвон|менеджер|оператор|заказать звонок|свяжитесь/.test(n)){
+      pending='cb-name';
+      return botSay(['Оформлю заявку на звонок. Как вас зовут?']);
+    }
+
+    var k=score(n);
+    if(k){
+      var parts=k.a();
+      return botSay(parts,k.chips);
+    }
+    return botSay(['Пока не нашла ответ на этот вопрос. В демо-версии я знаю про доставку, оплату, возврат, скидки и умею подбирать свет. Могу передать вопрос менеджеру.'],['Перезвоните мне','Что ты умеешь?','Подобрать светильник']);
+  }
+
+  /* ---------- события ---------- */
+  form.addEventListener('submit',function(e){
+    e.preventDefault();var v=input.value;if(!v.trim()||busy)return;
+    input.value='';handle(v);
+  });
+  document.querySelectorAll('.topic').forEach(function(b){
+    b.addEventListener('click',function(){side.classList.remove('open');if(!busy)handle(b.dataset.q)});
+  });
+  document.getElementById('sideToggle').addEventListener('click',function(){side.classList.toggle('open')});
+  side.addEventListener('click',function(e){if(e.target===side)side.classList.remove('open')});
+
+  document.getElementById('themeBtn').addEventListener('click',function(){
+    var root=document.documentElement;
+    var t=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',t);
+    try{localStorage.setItem('ai-demo-theme',t)}catch(e){}
+  });
+  try{var saved=localStorage.getItem('ai-demo-theme');if(saved==='light'||saved==='dark')document.documentElement.setAttribute('data-theme',saved)}catch(e){}
+
+  function start(){
+    log.innerHTML='';pending=null;flow={};userName='';
+    botSay([greet()+'! Я Лина, ассистент магазина «Северный свет». Отвечаю на вопросы, подбираю светильники и проверяю заказы.','Выберите тему или напишите свой вопрос.'],
+      ['Подобрать светильник','Как доставляете?','Где мой заказ?','Какие способы оплаты?']);
+  }
+  document.getElementById('clearBtn').addEventListener('click',function(){if(!busy)start()});
+  start();
+})();
+</script>
+</body>
+</html>
