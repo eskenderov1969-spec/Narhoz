@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru" class="no-loader">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Интернет-магазин: демо «Северный свет» — ESKENDEROV</title>
+    <meta name="description" content="Кейс: демо интернет-магазина светильников. Каталог с поиском и фильтрами, корзина, промокод и оформление заказа.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-size='20' font-weight='700' text-anchor='middle' fill='%23f5f5f5' font-family='Arial'%3EE%3C/text%3E%3C/svg%3E">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Интернет-магазин: демо «Северный свет»">
+    <meta property="og:description" content="Кейс: демо интернет-магазина светильников. Каталог с поиском и фильтрами, корзина, промокод и оформление заказа.">
+    <meta property="og:image" content="https://eskenderov1969-spec.github.io/Narhoz/og-shop.png">
+    <meta property="og:url" content="https://eskenderov1969-spec.github.io/Narhoz/case-shop.html">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:site_name" content="ESKENDEROV">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Интернет-магазин: демо «Северный свет»">
+    <meta name="twitter:description" content="Кейс: демо интернет-магазина светильников. Каталог с поиском и фильтрами, корзина, промокод и оформление заказа.">
+    <meta name="twitter:image" content="https://eskenderov1969-spec.github.io/Narhoz/og-shop.png">
+    <link rel="canonical" href="https://eskenderov1969-spec.github.io/Narhoz/case-shop.html">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="ESKENDEROV">
+    <meta name="theme-color" content="#141416">
+
+    <script>
+        /* Тема: сохранённый выбор, иначе — системная настройка устройства */
+        (function () {
+            var theme = null;
+            try { theme = localStorage.getItem("theme"); } catch (e) {}
+            if (theme !== "light" && theme !== "dark") {
+                theme = window.matchMedia &&
+                    window.matchMedia("(prefers-color-scheme: light)").matches
+                    ? "light" : "dark";
+            }
+            document.documentElement.setAttribute("data-theme", theme);
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute("content", theme === "light" ? "#fbf8f7" : "#141416");
+        })();
+    </script>
+    <noscript><style>.reveal{opacity:1!important;transform:none!important}.word{opacity:1!important;transform:none!important;filter:none!important}</style></noscript>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <a class="skip-link" href="#main">Перейти к содержимому</a>
+
+    <!-- SVG-спрайт иконок -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <defs>
+            <symbol id="i-ai" viewBox="0 0 24 24"><path d="M11 3l1.9 5.1L18 10l-5.1 1.9L11 17l-1.9-5.1L4 10l5.1-1.9z"/><path d="M18.5 15l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></symbol>
+            <symbol id="i-html" viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M13.5 5l-3 14"/></symbol>
+            <symbol id="i-css" viewBox="0 0 24 24"><path d="M8 4c-2 0-3 1-3 3v2c0 1.2-.8 2-2 3 1.2 1 2 1.8 2 3v2c0 2 1 3 3 3M16 4c2 0 3 1 3 3v2c0 1.2.8 2 2 3-1.2 1-2 1.8-2 3v2c0 2-1 3-3 3"/></symbol>
+            <symbol id="i-js" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5.5"/><text x="12" y="15.8" text-anchor="middle" font-size="9.5" font-weight="800" fill="currentColor" stroke="none" font-family="Inter,system-ui,sans-serif">JS</text></symbol>
+            <symbol id="i-py" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5.5"/><text x="12" y="15.8" text-anchor="middle" font-size="9.5" font-weight="800" fill="currentColor" stroke="none" font-family="Inter,system-ui,sans-serif">Py</text></symbol>
+            <symbol id="i-cpp" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5.5"/><text x="12" y="15.6" text-anchor="middle" font-size="8" font-weight="800" fill="currentColor" stroke="none" font-family="Inter,system-ui,sans-serif">C++</text></symbol>
+            <symbol id="i-cs" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5.5"/><text x="12" y="15.8" text-anchor="middle" font-size="9.5" font-weight="800" fill="currentColor" stroke="none" font-family="Inter,system-ui,sans-serif">C#</text></symbol>
+            <symbol id="i-ux" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="4"/><path d="M3 9h18M9 9v11"/></symbol>
+            <symbol id="i-auto" viewBox="0 0 24 24"><path d="M13 2.5L5 13.5h6l-1 8 8-11h-6z"/></symbol>
+            <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="3"/><path d="M5 15V7a3 3 0 0 1 3-3h8"/></symbol>
+            <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+            <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3L3 10.5l7 2.5 2.5 7z"/><path d="M10 13L21 3"/></symbol>
+        </defs>
+    </svg>
+
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+    <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+    <header class="header" id="header">
+        <div class="container header-container">
+
+            <div class="brand">
+                <a href="index.html" class="logo">
+                    ESKENDEROV<span>.</span>
+                </a>
+                <a href="index.html#contact" class="status status-header" data-status="open" data-tz="Europe/Moscow" data-tz-label="MSK">
+                    <span class="status-dot" aria-hidden="true"></span>
+                    <span class="status-text">Открыт к проектам</span>
+                    <time class="status-time" aria-label="Местное время"></time>
+                </a>
+            </div>
+
+            <nav class="nav" id="nav">
+                <span class="nav-pill" id="navPill" aria-hidden="true"></span>
+                <a href="index.html#home" class="nav-link">Главная</a>
+                <a href="index.html#about" class="nav-link">Обо мне</a>
+                <a href="index.html#ai-development" class="nav-link">AI Development</a>
+                <a href="index.html#services" class="nav-link">Услуги</a>
+                <a href="index.html#projects" class="nav-link active">Проекты</a>
+                <a href="index.html#contact" class="nav-link">Контакты</a>
+            </nav>
+
+            <div class="header-actions">
+
+                <button class="theme-toggle lang-toggle" id="langToggle" type="button" aria-label="Сменить язык">EN</button>
+
+                <button class="theme-toggle" id="themeToggle" type="button" aria-label="Переключить тему">
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                    </svg>
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+                    </svg>
+                </button>
+
+                <button class="menu-button" id="menuButton" aria-label="Открыть меню">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+            </div>
+
+        </div>
+    </header>
+
+    <main id="main">
+
+        <section class="section page-top">
+
+            <div class="container">
+
+                <a class="back-link reveal" href="index.html#projects"><i>←</i> Все проекты</a>
+
+                <!-- Кейс: интернет-магазин «Северный свет». Файл проекта: shop-demo.html, картинки: shop-*.webp -->
+                <div class="section-heading reveal">
+                    <span class="section-number">CASE STUDY</span>
+                    <h2>Интернет-магазин<span>.</span></h2>
+                </div>
+
+                <p class="lead-text reveal">Демо интернет-магазина светильников «Северный свет»: каталог, карточка товара, корзина с промокодом и оформление заказа. Магазин вымышленный, проект сделан как пример работы.</p>
+
+                <div class="case-meta reveal">
+                    <div class="case-meta-item">
+                        <div class="svc-label">Роль</div>
+                        <p>Дизайн и разработка</p>
+                    </div>
+                    <div class="case-meta-item">
+                        <div class="svc-label">Стек</div>
+                        <p>HTML / CSS · JavaScript</p>
+                    </div>
+                    <div class="case-meta-item">
+                        <div class="svc-label">Год</div>
+                        <p>2026</p>
+                    </div>
+                    <div class="case-meta-item">
+                        <div class="svc-label">Ссылка</div>
+                        <p><a class="more-link" href="shop-demo.html" target="_blank" rel="noopener">Открыть демо <i>↗</i></a> <a class="more-link more-link-code" href="https://github.com/eskenderov1969-spec/Narhoz/blob/HEAD/shop-demo.html" data-code="shop-demo.html" target="_blank" rel="noopener">Код <i>{ }</i></a></p>
+                    </div>
+                </div>
+
+                <div class="case-gallery reveal">
+                    <div class="project-thumb"><img src="shop-catalog.webp" width="1600" height="900" loading="lazy" decoding="async" alt="Каталог с категориями, фильтрами и сортировкой"></div>
+                    <div class="project-thumb"><img src="shop-product.webp" width="1600" height="900" loading="lazy" decoding="async" alt="Карточка товара с выбором отделки и цвета света"></div>
+                    <div class="project-thumb"><img src="shop-cart.webp" width="1600" height="900" loading="lazy" decoding="async" alt="Корзина с промокодом и шкалой бесплатной доставки"></div>
+                </div>
+
+
+                <div class="case-block reveal">
+                    <h3>Задача</h3>
+                    <p>Показать, как выглядит небольшой интернет-магазин, в котором удобно выбрать товар и оформить заказ за пару минут: найти нужный светильник, сравнить цены, собрать корзину и увидеть итоговую сумму с доставкой.</p>
+                </div>
+
+                <div class="case-block reveal">
+                    <h3>Решение</h3>
+                    <p>Одностраничный магазин на чистых HTML, CSS и JavaScript без библиотек и сервера. Каталог из 12 товаров с категориями, поиском, сортировкой и фильтрами по цене, скидке и наличию. В карточке товара можно выбрать отделку (рисунок светильника перекрашивается сразу) и цвет света, увидеть остатки и похожие товары. Светильники нарисованы кодом (SVG), поэтому страница лёгкая и не зависит от фотографий. Корзина выезжает сбоку, показывает, сколько осталось до бесплатной доставки, и применяет промокоды. Оформление включает выбор доставки и оплаты с пересчётом суммы. Корзина, избранное и тема сохраняются в браузере. Есть тёмная тема и «включаемая» лампа на главном экране.</p>
+                </div>
+
+                <div class="case-block reveal">
+                    <h3>Результат</h3>
+                    <p>Рабочее демо, которое можно пройти от первого клика до подтверждения заказа с конфетти. Оно адаптивное, управляется с клавиатуры (Esc закрывает окна, Tab не выходит за пределы окна) и учитывает настройку «уменьшить движение». Форма заказа проверяет данные и ничего не отправляет. Для реального магазина её подключают к почте, Telegram или платёжному сервису, а товары вместо кода берут из базы или таблицы.</p>
+                </div>
+
+                <div class="case-block reveal">
+                    <h3>Что внутри</h3>
+                    <ul class="price-list">
+                        <li>Каталог: категории, поиск, сортировка, фильтры по цене, скидке и наличию</li>
+                        <li>Карточка товара: выбор отделки и цвета света, остатки, похожие товары</li>
+                        <li>Корзина: промокоды WELCOME10 и LAMP500, шкала бесплатной доставки</li>
+                        <li>Оформление: доставка, оплата и пересчёт итоговой суммы</li>
+                        <li>Избранное, недавно просмотренные, тёмная и светлая тема</li>
+                    </ul>
+                </div>
+
+                <div class="cta-box reveal">
+                    <h3>Нужен похожий проект?</h3>
+                    <p>Расскажите о задаче, и я предложу решение и оценку сроков.</p>
+                    <div class="cta-buttons">
+                        <a href="index.html#contact" class="button button-primary">Написать мне</a>
+                        <a href="shop-demo.html" target="_blank" rel="noopener" class="button button-secondary">Открыть демо</a>
+                        <a href="https://github.com/eskenderov1969-spec/Narhoz/blob/HEAD/shop-demo.html" data-code="shop-demo.html" target="_blank" rel="noopener" class="button button-secondary">Смотреть код</a>
+                        <a href="index.html#projects" class="button button-secondary">Другие проекты</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+
+        <div class="container footer-container">
+
+            <a href="index.html" class="logo">
+                ESKENDEROV<span>.</span>
+            </a>
+
+
+            <nav class="footer-links" aria-label="Pages">
+                <a href="services.html">Услуги подробно</a>
+                <a href="blog.html">Блог</a>
+                <a href="links.html">Ссылки</a>
+            </nav>
+
+            <p>
+                © <span id="year"></span> ESKENDEROV. All rights reserved.
+            </p>
+
+            <a href="#main" class="back-top">↑</a>
+
+        </div>
+
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
