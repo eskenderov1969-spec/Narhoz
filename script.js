@@ -353,6 +353,17 @@ if (window.matchMedia) {
 
 const I18N = {
     "Перейти к содержимому": "Skip to content",
+    "Консольное приложение на Python для учёта личных расходов: записывает траты, считает статистику, следит за месячными лимитами и выгружает данные в CSV. Демо запускает настоящий Python прямо в браузере. Данные вымышленные, проект сделан как пример работы.": "A console app in Python for personal expense tracking: it records spending, calculates statistics, watches monthly limits and exports data to CSV. The demo runs real Python right in the browser. The data is fictional and the project was made as a sample of my work.",
+    "Трекер расходов в консоли: категории, месячные лимиты и статистика с диаграммами. Демо запускает настоящий Python прямо в браузере.": "A console expense tracker: categories, monthly limits and statistics with charts. The demo runs real Python right in the browser.",
+    "Python 3 · стандартная библиотека": "Python 3 · standard library",
+    "Сделать небольшое полезное приложение на Python, которым удобно пользоваться из терминала: быстро записать трату, увидеть, куда уходят деньги, и вовремя заметить, что лимит на месяц почти исчерпан.": "To build a small useful Python app that is comfortable to use from a terminal: quickly record an expense, see where the money goes and notice in time that the monthly limit is almost used up.",
+    "Одно приложение в одном файле, только стандартная библиотека Python. Суммы считаются через Decimal, поэтому нет ошибок округления с копейками. Команды разбирает argparse, данные хранятся в JSON, выгрузка идёт в CSV. Логика (журнал расходов, расчёты, вывод) отделена от командной строки, поэтому тот же файл запускается и на компьютере, и в браузере. Для демо страница загружает Pyodide, то есть Python, собранный в WebAssembly, и выполняет настоящий tracker.py. Ошибки ввода превращаются в понятные подсказки, а не в трейсбэк.": "One app in one file, using only the Python standard library. Amounts are calculated with Decimal, so there are no rounding errors with kopecks. Commands are parsed by argparse, data is stored in JSON and exported to CSV. The logic (the expense ledger, calculations, output) is separated from the command line, so the same file runs both on a computer and in the browser. For the demo, the page loads Pyodide, that is Python compiled to WebAssembly, and runs the real tracker.py. Input errors turn into clear hints instead of a traceback.",
+    "Работающее приложение, которое можно попробовать без установки: нажмите demo, затем stats и budget. Код можно посмотреть на сайте кнопкой «Код» или скачать и запустить командой python tracker.py list. Демо хранит записи только в браузере. Во время разработки я нашёл разницу в поведении argparse между версиями Python и сделал разбор даты устойчивым к ней, поэтому приложение одинаково работает в версиях 3.12 и новее.": "A working app you can try without installing anything: press demo, then stats and budget. You can view the code on the site with the “Code” button or download it and run it with python tracker.py list. The demo stores records only in the browser. During development I found a difference in argparse behavior between Python versions and made date parsing resistant to it, so the app works the same in Python 3.12 and newer.",
+    "Команды add, list, delete, stats, budget, export, demo": "Commands add, list, delete, stats, budget, export, demo",
+    "Статистика по категориям и месяцам с текстовыми диаграммами": "Statistics by category and month with text charts",
+    "Месячные лимиты и предупреждение о превышении": "Monthly limits and an over-limit warning",
+    "Деньги через Decimal, хранение в JSON, выгрузка в CSV": "Money via Decimal, JSON storage, CSV export",
+    "Запуск на компьютере и в браузере из одного файла": "Runs on a computer and in the browser from a single file",
     "Избранное, недавно просмотренные, тёмная и светлая тема": "Favorites, recently viewed, dark and light themes",
     "Оформление: доставка, оплата и пересчёт итоговой суммы": "Checkout: delivery, payment and a recalculated total",
     "Корзина: промокоды WELCOME10 и LAMP500, шкала бесплатной доставки": "Cart: promo codes WELCOME10 and LAMP500, free-delivery progress bar",
@@ -1600,11 +1611,24 @@ document.querySelectorAll(".stat, .ai-item, .contact-action, .bento-card, .ai-bo
     }
 
     /* Лёгкая подсветка: комментарии, строки, теги, ключевые слова */
-    function highlight(src) {
+    const wrapLines = (cls, text) =>
+        text.split("\n").map(p => p ? `<span class="${cls}">${p}</span>` : p).join("\n");
+
+    function highlightPython(src) {
+        const re = /(#[^\n]*)|("""[\s\S]*?"""|\'\'\'[\s\S]*?\'\'\'|[rRfFbB]{0,2}"(?:[^"\\\n]|\\.)*"|[rRfFbB]{0,2}\'(?:[^\'\\\n]|\\.)*\')|(^[ \t]*@\w+)|(\b(?:def|class|return|if|elif|else|for|while|in|import|from|as|with|try|except|raise|finally|lambda|not|and|or|is|None|True|False|pass|break|continue|yield|global|assert|del|self)\b)/gm;
+        return esc(src).replace(re, (m, com, str, deco, kw) => {
+            if (com) return wrapLines("tk-c", com);
+            if (str) return wrapLines("tk-s", str);
+            if (deco) return wrapLines("tk-t", deco);
+            return wrapLines("tk-k", kw);
+        });
+    }
+
+    function highlight(src, path) {
+        if (/\.py$/i.test(path || "")) return highlightPython(src);
         const re = /(&lt;!--[\s\S]*?--&gt;|\/\*[\s\S]*?\*\/|(?:^|[^:"'\w])\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'|`(?:[^`\\]|\\.)*`)|(&lt;\/?[a-zA-Z][\w-]*)|(\b(?:const|let|var|function|return|if|else|for|while|new|this|true|false|null|typeof|forEach)\b)/gm;
 
-        const wrap = (cls, text) =>
-            text.split("\n").map(p => p ? `<span class="${cls}">${p}</span>` : p).join("\n");
+        const wrap = wrapLines;
 
         return esc(src).replace(re, (m, com, str, tag, kw) => {
             if (com) {
@@ -1677,7 +1701,7 @@ document.querySelectorAll(".stat, .ai-item, .contact-action, .bento-card, .ai-bo
         modal.querySelector("[data-close]").setAttribute("aria-label", t.close);
         const demo = modal.querySelector("[data-demo]");
         demo.textContent = t.demo + " ↗";
-        demo.href = current.path;
+        demo.href = /\.py$/i.test(current.path) ? "python-demo.html" : current.path;
         modal.querySelector(".code-modal-box").setAttribute("aria-label", t.title);
     }
 
@@ -1723,7 +1747,7 @@ document.querySelectorAll(".stat, .ai-item, .contact-action, .bento-card, .ai-bo
                 cache[path] = await res.text();
             }
             current.src = cache[path];
-            body.innerHTML = toLines(highlight(cache[path]));
+            body.innerHTML = toLines(highlight(cache[path], path));
             modal.querySelector(".cm-meta").textContent =
                 cache[path].split("\n").length + " " + L().lines;
             modal.querySelector(".code-modal-body").scrollTop = 0;
