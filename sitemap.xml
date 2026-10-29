@@ -54,4 +54,28 @@
         <changefreq>yearly</changefreq>
         <priority>0.4</priority>
     </url>
+    <url>
+        <loc>https://eskenderov1969-spec.github.io/Narhoz/case-shop.html</loc>
+        <lastmod>2026-10-27</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://eskenderov1969-spec.github.io/Narhoz/shop-demo.html</loc>
+        <lastmod>2026-10-27</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://eskenderov1969-spec.github.io/Narhoz/case-python.html</loc>
+        <lastmod>2026-10-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://eskenderov1969-spec.github.io/Narhoz/python-demo.html</loc>
+        <lastmod>2026-10-29</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
+    </url>
 </urlset>
