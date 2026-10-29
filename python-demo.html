@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>tracker.py — трекер расходов на Python</title>
+<meta name="description" content="Демо консольного приложения на Python: трекер расходов с категориями, бюджетами и статистикой. Работает прямо в браузере, код запускается через Pyodide.">
+<meta name="theme-color" content="#0e1311">
+<meta property="og:title" content="tracker.py — трекер расходов на Python">
+<meta property="og:description" content="Консольное приложение на Python, которое работает прямо в браузере. Попробуйте команды.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://eskenderov1969-spec.github.io/Narhoz/og-python.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://eskenderov1969-spec.github.io/Narhoz/python-demo.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://eskenderov1969-spec.github.io/Narhoz/python-demo.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230e1311'/%3E%3Ctext x='16' y='22' font-size='16' font-weight='700' text-anchor='middle' fill='%2347d18c' font-family='monospace'%3E%3E_%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0f0d; --panel:#111815; --panel2:#17201c; --line:rgba(160,255,210,.12);
+  --text:#e5efe9; --muted:#8fa399; --green:#47d18c; --amber:#f5b14a; --red:#ff7a6b; --blue:#6cb6ff;
+  --mono:"JetBrains Mono","SFMono-Regular",Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(700px 460px at 8% 0%,rgba(71,209,140,.13),transparent 65%),radial-gradient(560px 420px at 100% 100%,rgba(108,182,255,.09),transparent 65%)}
+button,input{font-family:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+a{color:inherit;text-decoration:none}
+
+.app{position:relative;max-width:1240px;margin:0 auto;padding:22px;min-height:100%;display:grid;grid-template-columns:1fr 330px;gap:20px;align-items:start}
+.term{background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;height:calc(100vh - 44px);min-height:520px;box-shadow:0 40px 80px -40px rgba(0,0,0,.8)}
+.bar{display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--panel2);border-bottom:1px solid var(--line)}
+.dots{display:flex;gap:7px}.dots i{width:11px;height:11px;border-radius:50%;background:#ff5f57}.dots i:nth-child(2){background:#febc2e}.dots i:nth-child(3){background:#28c840}
+.title{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.status{margin-left:auto;font-family:var(--mono);font-size:12px;display:flex;align-items:center;gap:8px;color:var(--muted)}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--amber);animation:pulse 1.2s infinite}
+.status.ready i{background:var(--green);animation:none;box-shadow:0 0 10px var(--green)}
+.status.fail i{background:var(--red);animation:none}
+@keyframes pulse{50%{opacity:.35}}
+
+.out{flex:1;overflow:auto;padding:18px 20px 8px;font-family:var(--mono);font-size:13.5px;line-height:1.6;scroll-behavior:smooth}
+.out .intro{color:var(--muted);margin-bottom:14px}
+.out .intro b{color:var(--green)}
+.entry{margin-bottom:12px;animation:in .25s both}
+@keyframes in{from{opacity:0;transform:translateY(5px)}}
+.cmd{color:var(--text)}
+.ps{color:var(--green);font-weight:700;margin-right:8px;user-select:none}
+.res{white-space:pre;color:#c9d8d0;overflow-x:auto;padding:2px 0 2px 18px;margin:0;font:inherit}
+.res .b{color:var(--amber)}.res .g{color:#34423b}.res .e{color:var(--red)}.res .w{color:var(--amber)}.res .ok{color:var(--green)}.res .h{color:var(--blue);font-weight:700}
+.loadbox{margin:10px 0 6px}
+.progress{height:6px;border-radius:3px;background:var(--panel2);overflow:hidden;margin-top:10px;max-width:360px}
+.progress i{display:block;height:100%;width:8%;border-radius:3px;background:linear-gradient(90deg,var(--green),var(--blue));transition:width .6s}
+
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 16px;border-top:1px solid var(--line);scrollbar-width:thin}
+.chip{flex:none;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--panel2);font-family:var(--mono);font-size:12.5px;cursor:pointer;transition:.2s;color:var(--text)}
+.chip:hover:not(:disabled){border-color:var(--green);color:var(--green);transform:translateY(-2px)}
+.chip:disabled{opacity:.4;cursor:wait}
+form{display:flex;align-items:center;gap:10px;padding:12px 18px 16px;border-top:1px solid var(--line);background:var(--panel)}
+form .ps{font-family:var(--mono);font-size:14px;white-space:nowrap}
+form .pre{font-family:var(--mono);font-size:14px;color:var(--muted);margin-right:-4px}
+#in{flex:1;min-width:0;background:transparent;border:0;font-family:var(--mono);font-size:14px;color:var(--text);caret-color:var(--green)}
+#in:focus{outline:none}
+#in::placeholder{color:#4f6158}
+#in:disabled{opacity:.5}
+.run{border:0;width:40px;height:40px;border-radius:50%;background:var(--green);color:#06130c;font-size:18px;font-weight:700;cursor:pointer;transition:.2s;flex:none}
+.run:hover:not(:disabled){transform:scale(1.1)}.run:disabled{opacity:.4}
+
+aside{display:flex;flex-direction:column;gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px}
+.card h1{font-size:22px;letter-spacing:-.01em;margin-bottom:6px}
+.card h2{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:12px;font-weight:600}
+.card p{color:var(--muted);font-size:14px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.tags span{padding:4px 10px;border-radius:999px;background:var(--panel2);font-family:var(--mono);font-size:12px;color:var(--green)}
+.steps{list-style:none;display:grid;gap:12px;counter-reset:s}
+.steps li{display:flex;gap:12px;font-size:14px;color:var(--text);counter-increment:s}
+.steps li::before{content:counter(s);flex:none;width:24px;height:24px;border-radius:8px;background:var(--panel2);color:var(--green);font-family:var(--mono);font-size:12px;display:grid;place-items:center;margin-top:1px}
+.steps small{display:block;color:var(--muted);font-size:13px}
+.btns{display:grid;gap:8px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);font-size:14px;font-weight:500;cursor:pointer;transition:.2s}
+.btn:hover:not(:disabled){border-color:var(--green);color:var(--green)}
+.btn:disabled{opacity:.45;cursor:wait}
+.btn.main{background:var(--green);color:#06130c;border-color:var(--green);font-weight:700}
+.btn.main:hover{color:#06130c;background:#6be3a8}
+.note{font-size:12.5px;color:var(--muted)}
+
+@media(max-width:960px){
+  .app{grid-template-columns:1fr;padding:10px}
+  .term{height:76vh;min-height:460px;order:1}
+  aside{order:2}
+  .out{font-size:12.5px;padding:14px}
+  .title{display:none}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.out{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <section class="term" aria-label="Терминал">
+    <div class="bar">
+      <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="title">tracker.py — ~/projects</span>
+      <span class="status" id="status" role="status"><i></i><span id="statusText">загрузка Python…</span></span>
+    </div>
+
+    <div class="out" id="out" role="log" aria-live="polite">
+      <div class="intro">
+        <b>tracker.py</b> — трекер расходов на Python.<br>
+        Это настоящий Python: страница скачивает интерпретатор (около 10 МБ, один раз) и запускает файл <b>tracker.py</b> прямо в вашем браузере.
+        <div class="loadbox" id="loadbox">Загружаю Python…<div class="progress"><i id="prog"></i></div></div>
+      </div>
+    </div>
+
+    <div class="chips" id="chips" aria-label="Быстрые команды">
+      <button class="chip" type="button" data-c="demo" disabled>demo</button>
+      <button class="chip" type="button" data-c="list" disabled>list</button>
+      <button class="chip" type="button" data-c="stats" disabled>stats</button>
+      <button class="chip" type="button" data-c="budget" disabled>budget</button>
+      <button class="chip" type="button" data-c="add 450 еда обед в кафе" disabled>add 450 еда обед</button>
+      <button class="chip" type="button" data-c="add 3200 развлечения концерт" disabled>add 3200 развлечения</button>
+      <button class="chip" type="button" data-c="stats --month 2026-10" disabled>stats --month</button>
+      <button class="chip" type="button" data-c="help" disabled>help</button>
+    </div>
+
+    <form id="form" autocomplete="off">
+      <span class="ps">$</span><span class="pre">tracker</span>
+      <input id="in" type="text" placeholder="введите команду, например: add 450 еда обед" aria-label="Команда" disabled spellcheck="false" autocapitalize="off">
+      <button class="run" id="run" type="submit" aria-label="Выполнить" disabled>↵</button>
+    </form>
+  </section>
+
+  <aside>
+    <div class="card">
+      <h1>Трекер расходов</h1>
+      <p>Консольное приложение на Python: записывает траты, считает статистику по категориям и месяцам, следит за месячными лимитами.</p>
+      <div class="tags"><span>Python 3</span><span>argparse</span><span>decimal</span><span>json</span><span>csv</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Как попробовать</h2>
+      <ol class="steps">
+        <li><div>Нажмите <b>demo</b><small>заполнит журнал примерами</small></div></li>
+        <li><div>Посмотрите <b>stats</b> и <b>budget</b><small>диаграммы и лимиты</small></div></li>
+        <li><div>Добавьте трату: <b>add 450 еда обед</b><small>можно с датой: --date 2026-10-01</small></div></li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>Данные</h2>
+      <div class="btns">
+        <a class="btn main" href="tracker.py" download>Скачать tracker.py</a>
+        <button class="btn" type="button" id="csvBtn" disabled>Выгрузить CSV</button>
+        <button class="btn" type="button" id="resetBtn" disabled>Очистить данные</button>
+      </div>
+      <p class="note" style="margin-top:12px">Записи хранятся только в вашем браузере и никуда не отправляются. Чтобы запустить на своём компьютере: <code>python tracker.py list</code></p>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+(function(){
+  var $=function(s){return document.querySelector(s)};
+  var PYO='https://cdn.jsdelivr.net/pyodide/v0.26.4/full/';
+  var out=$('#out'),inp=$('#in'),run=$('#run'),status=$('#status'),statusText=$('#statusText');
+  var py=null,handle=null,dump=null,restore=null,busy=false;
+  var history=[],hIndex=0,KEY='tracker-ledger-v1';
+
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+  function paint(text){
+    return esc(text)
+      .replace(/(█+)/g,'<span class="b">$1</span>').replace(/(░+)/g,'<span class="g">$1</span>')
+      .replace(/^(Ошибка:.*)$/gm,'<span class="e">$1</span>')
+      .replace(/^(Внимание:.*)$/gm,'<span class="w">$1</span>')
+      .replace(/(ПРЕВЫШЕН!|близко к лимиту)/g,'<span class="e">$1</span>')
+      .replace(/^(Добавлено.*|Удалено.*|Лимит.*|Сохранено.*)$/gm,'<span class="ok">$1</span>')
+      .replace(/^((?:Статистика|Бюджеты|Команды|По категориям|По месяцам|Три самые).*)$/gm,'<span class="h">$1</span>');
+  }
+  function scroll(){out.scrollTop=out.scrollHeight}
+  function print(cmd,res){
+    var d=document.createElement('div');d.className='entry';
+    d.innerHTML=(cmd!==null?'<div class="cmd"><span class="ps">$</span>tracker '+esc(cmd)+'</div>':'')+(res!==''?'<pre class="res">'+paint(res)+'</pre>':'');
+    out.appendChild(d);scroll();
+  }
+  function setReady(on){
+    [inp,run,$('#csvBtn'),$('#resetBtn')].forEach(function(e){e.disabled=!on});
+    document.querySelectorAll('.chip').forEach(function(c){c.disabled=!on});
+    if(on&&window.matchMedia('(min-width:961px)').matches)inp.focus();
+  }
+  function setStatus(kind,text){status.className='status '+(kind||'');statusText.textContent=text}
+  function save(){try{localStorage.setItem(KEY,dump())}catch(e){}}
+
+  /* ---- загрузка Python ---- */
+  function loadScript(src){return new Promise(function(ok,fail){var s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=function(){fail(new Error('script'))};document.head.appendChild(s)})}
+  async function boot(){
+    var prog=$('#prog');
+    try{
+      await loadScript(PYO+'pyodide.js');prog.style.width='40%';
+      py=await loadPyodide({indexURL:PYO});prog.style.width='75%';
+      var src=await (await fetch('tracker.py',{cache:'no-cache'})).text();
+      py.FS.writeFile('tracker.py',src);
+      py.runPython('import tracker, sys\nL = tracker.Ledger()');
+      handle=py.runPython('lambda line: tracker.run_line(L, line)');
+      dump=py.runPython('lambda: L.dumps()');
+      restore=py.runPython('lambda text: L.load(text)');
+      var ver=py.runPython('sys.version.split()[0]');
+      try{var saved=localStorage.getItem(KEY);if(saved)restore(saved)}catch(e){}
+      prog.style.width='100%';
+      setTimeout(function(){var lb=$('#loadbox');if(lb)lb.remove()},300);
+      setStatus('ready','Python '+ver+' · готово');
+      print(null,'Готово. Введите help или нажмите demo, чтобы заполнить журнал примерами.');
+      setReady(true);
+    }catch(err){
+      setStatus('fail','не загрузилось');
+      var lb=$('#loadbox');if(lb)lb.innerHTML='<span style="color:var(--red)">Не удалось загрузить Python. Нужен интернет для первой загрузки.</span><br>Обновите страницу или посмотрите исходный код: <a href="tracker.py" style="color:var(--green);text-decoration:underline">tracker.py</a>';
+    }
+  }
+
+  /* ---- выполнение команд ---- */
+  function exec(raw){
+    var line=raw.trim();if(!line||busy||!py)return;
+    if(/^tracker\s/i.test(line))line=line.replace(/^tracker\s+/i,'');
+    history.push(line);hIndex=history.length;
+    if(line==='clear'||line==='cls'){out.innerHTML='';return}
+    busy=true;
+    var res;
+    try{res=handle(line)}catch(e){res='Внутренняя ошибка: '+e.message}
+    print(line,res);save();busy=false;
+  }
+  $('#form').addEventListener('submit',function(e){e.preventDefault();var v=inp.value;inp.value='';exec(v)});
+  inp.addEventListener('keydown',function(e){
+    if(e.key==='ArrowUp'){e.preventDefault();if(hIndex>0){hIndex--;inp.value=history[hIndex]}}
+    if(e.key==='ArrowDown'){e.preventDefault();if(hIndex<history.length-1){hIndex++;inp.value=history[hIndex]}else{hIndex=history.length;inp.value=''}}
+  });
+  $('#chips').addEventListener('click',function(e){var c=e.target.closest('.chip');if(c&&!c.disabled)exec(c.dataset.c)});
+  out.addEventListener('click',function(){if(window.getSelection().toString()==='')inp.focus()});
+
+  $('#csvBtn').addEventListener('click',function(){
+    var csv=handle('export');
+    if(csv.indexOf('id,')!==0){print('export','Выгружать нечего: записей нет.');return}
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'}));
+    a.download='расходы.csv';document.body.appendChild(a);a.click();a.remove();
+    print('export','Файл расходы.csv сохранён.');
+  });
+  $('#resetBtn').addEventListener('click',function(){
+    restore('{"expenses": [], "budgets": {}}');save();print(null,'Данные очищены.');
+  });
+
+  boot();
+})();
+</script>
+</body>
+</html>
